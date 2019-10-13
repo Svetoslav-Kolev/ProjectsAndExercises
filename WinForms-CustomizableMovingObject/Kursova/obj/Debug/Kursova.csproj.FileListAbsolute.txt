@@ -1,0 +1,13 @@
+C:\Users\User\source\repos\Kursova\Kursova\bin\Debug\Kursova.exe.config
+C:\Users\User\source\repos\Kursova\Kursova\bin\Debug\Kursova.exe
+C:\Users\User\source\repos\Kursova\Kursova\bin\Debug\Kursova.pdb
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.csprojAssemblyReference.cache
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.MovingStuff.resources
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.Properties.Resources.resources
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.csproj.GenerateResource.cache
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.exe
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.pdb
+C:\Users\User\source\repos\Kursova\Kursova\bin\Debug\mushroom.png
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.StartForm.resources
+C:\Users\User\source\repos\Kursova\Kursova\obj\Debug\Kursova.InformationForm.resources
