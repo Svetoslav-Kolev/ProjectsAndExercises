@@ -1,0 +1,11 @@
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\bin\Debug\netcoreapp2.1\ElevatorProject.deps.json
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\bin\Debug\netcoreapp2.1\ElevatorProject.runtimeconfig.json
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\bin\Debug\netcoreapp2.1\ElevatorProject.runtimeconfig.dev.json
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\bin\Debug\netcoreapp2.1\ElevatorProject.dll
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\bin\Debug\netcoreapp2.1\ElevatorProject.pdb
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.csprojAssemblyReference.cache
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.AssemblyInfo.cs
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.dll
+C:\Users\User\source\repos\ElevatorProject\ElevatorProject\obj\Debug\netcoreapp2.1\ElevatorProject.pdb
