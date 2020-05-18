@@ -29,11 +29,11 @@ namespace FileSizeToString.Classes
                 string lower = size[0];
                 string higher = size[1];
                 tempSize = (Convert.ToDouble(fileSize) / Math.Pow(1024, (fileSizeLength-1)/3));
-                result = CheckSize(tempSize, lower, higher, precision,fileSizeLength);
+                result = CheckSize(tempSize, lower, higher, precision);
             }
             return result;
         }
-        private static string CheckSize(double tempSize , string sizeLower, string sizeUpper,int precision,int fileSizeLength)
+        private static string CheckSize(double tempSize , string sizeLower, string sizeUpper,int precision)
         {
             string result = "";
             if (tempSize < 1)
