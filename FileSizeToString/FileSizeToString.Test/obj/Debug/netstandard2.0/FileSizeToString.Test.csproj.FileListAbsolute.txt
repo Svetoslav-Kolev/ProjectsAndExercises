@@ -1,0 +1,10 @@
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\FileSizeToString.Test.deps.json
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\FileSizeToString.Test.dll
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\obj\Debug\netstandard2.0\FileSizeToString.Test.csprojAssemblyReference.cache
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\obj\Debug\netstandard2.0\FileSizeToString.Test.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\obj\Debug\netstandard2.0\FileSizeToString.Test.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\obj\Debug\netstandard2.0\FileSizeToString.Test.AssemblyInfo.cs
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\NUnit3.TestAdapter.dll
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\NUnit3.TestAdapter.pdb
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\nunit.engine.dll
+C:\Users\User\source\repos\FileSizeToString\FileSizeToString.Test\bin\Debug\netstandard2.0\nunit.engine.api.dll
