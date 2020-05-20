@@ -6,30 +6,27 @@ namespace FileSizeToString.Classes
 {
    public static class FormattingExtensions
     {
+        public static string[] sizes = new string[6] { "bytes", "KB", "MB", "GB", "TB", "PB" };
         //fileSize base is bytes
+        // file Size lengths - 4 - KB , 7 - MB, 10 - GB , 13 - TB, 16 - PB
         public static string FileSizeToString(long fileSize, int precision = 2)
         {
             string result = "";
-            // file Size lengths - 4 - KB , 7 - MB, 10 - GB , 13 - TB, 16 - PB
-            int fileSizeLength = fileSize.ToString().Length;
-            double tempSize = 0;
-            string[] sizes = new string[6];
-            sizes[1] = "bytes KB";
-            sizes[2] = "KB MB";
-            sizes[3] = "MB GB";
-            sizes[4] = "GB TB";
-            sizes[5] = "TB PB";
+            int fileSizeLength = (int)Math.Ceiling(Math.Log10(fileSize));
+            double tempSize = 0;    
+            int order = (fileSizeLength - 1) / 3;
             if (fileSize < 1024)
             {
                 result = Convert.ToInt32(fileSize) + " bytes";
             }
             else
             {
-                string[] size = sizes[(fileSizeLength - 1) / 3].Split();
-                string lower = size[0];
-                string higher = size[1];
-                tempSize = (Convert.ToDouble(fileSize) / Math.Pow(1024, (fileSizeLength-1)/3));
-                result = CheckSize(tempSize, lower, higher, precision);
+                tempSize = Convert.ToDouble(fileSize);
+                for (int i = 0; i < order; i++)
+                {
+                    tempSize /= 1024;
+                }
+                result = CheckSize(tempSize, sizes[order-1], sizes[order], precision);
             }
             return result;
         }

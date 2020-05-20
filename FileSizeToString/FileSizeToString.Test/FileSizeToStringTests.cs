@@ -18,7 +18,7 @@ namespace FileSizeToString.Test
             Assert.AreEqual("511 bytes", FormattingExtensions.FileSizeToString(511));
             Assert.AreEqual("512 bytes", FormattingExtensions.FileSizeToString(512));
             Assert.AreEqual("1023 bytes", FormattingExtensions.FileSizeToString(1023));
-
+            Assert.AreEqual("0 bytes", FormattingExtensions.FileSizeToString(000000000));
         }
         [Test]
         public void SizeShouldWorkCorrectlyForKilobytes()

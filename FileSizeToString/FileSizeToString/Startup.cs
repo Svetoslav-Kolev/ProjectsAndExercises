@@ -7,7 +7,7 @@ namespace FileSizeToString
     {
         static void Main(string[] args)
         {
-            
+            Console.WriteLine(FormattingExtensions.FileSizeToString(00000000000));
             Console.WriteLine(FormattingExtensions.FileSizeToString(107374182));
             Console.WriteLine(FormattingExtensions.FileSizeToString(0));
             Console.WriteLine(FormattingExtensions.FileSizeToString(1));
@@ -18,7 +18,6 @@ namespace FileSizeToString
             Console.WriteLine(FormattingExtensions.FileSizeToString(1024));
             Console.WriteLine(FormattingExtensions.FileSizeToString(1025));
             Console.WriteLine(FormattingExtensions.FileSizeToString(100000));
-         
             Console.WriteLine(FormattingExtensions.FileSizeToString(1010000));
             Console.WriteLine(FormattingExtensions.FileSizeToString(1048575));
             Console.WriteLine(FormattingExtensions.FileSizeToString(1048576));
