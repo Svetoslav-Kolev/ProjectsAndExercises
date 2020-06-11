@@ -1,0 +1,70 @@
+Задача 1 
+-
+USE AdventureWorks2017
+SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Production.Product.Name 
+FROM Sales.SalesOrderDetail JOIN Production.Product
+ON Production.Product.ProductID=Sales.SalesOrderDetail.ProductID 
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00'
+
+--------------------------------------------------------------------------------------------
+Задача 2 
+-
+USE AdventureWorks2017
+SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Sales.SalesOrderDetail.OrderQty,Production.Product.Name 
+FROM Sales.SalesOrderDetail JOIN Production.Product
+ON Production.Product.ProductID=Sales.SalesOrderDetail.ProductID 
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00'
+
+--------------------------------------------------------------------------------------------
+Задача 3 
+-
+USE AdventureWorks2017
+--There are no orders with more than 1 product in quantity
+SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Sales.SalesOrderDetail.OrderQty
+FROM Sales.SalesOrderDetail
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00' AND Sales.SalesOrderDetail.OrderQty Between 3 AND 9
+
+
+---------------------------------------------------------------------------------------------
+Задача 4 
+-
+USE AdventureWorks2017
+--Sales order number is basically sales order Id plus 'SO' from behind
+SELECT TOP 1 'SO'+ convert(VARCHAR(30),Sales.SalesOrderHeader.SalesOrderID+1)
+AS NextSalesOrderNumber
+FROM Sales.SalesOrderHeader
+
+
+
+--------------------------------------------------------------------------------------------
+Задача 5 
+-
+USE AdventureWorks2017
+SELECT Person.Person.FirstName,Person.Person.MiddleName,Person.Person.LastName,Sales.SalesOrderHeader.OrderDate
+FROM Sales.SalesOrderHeader JOIN Sales.Customer
+ON Sales.SalesOrderHeader.CustomerID = Sales.Customer.CustomerID 
+Join Person.Person
+ON Sales.Customer.PersonID = Person.Person.BusinessEntityID 
+WHERE Sales.SalesOrderHeader.OrderDate < '2012-09-30 00:00:00' OR Sales.SalesOrderHeader.OrderDate > '2013-06-30 00:00:00'
+
+--------------------------------------------------------------------------------------------
+Задача 6
+-
+USE AdventureWorks2017
+
+SELECT 
+LAG(Sales.SalesOrderHeader.SalesOrderNumber)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) previousNumber,
+LAG(Sales.SalesOrderHeader.OrderDate)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) previousDate,
+LEAD(Sales.SalesOrderHeader.SalesOrderNumber)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) futureNumber,
+LEAD(Sales.SalesOrderHeader.OrderDate)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) futureDate,
+Sales.SalesOrderHeader.SalesOrderNumber , Sales.SalesOrderHeader.OrderDate
+FROM Sales.SalesOrderHeader
+Where Sales.SalesOrderHeader.CustomerID = (
+	SELECT CustomerID 
+	From Sales.Customer JOIN Person.Person 
+	ON Sales.Customer.PersonID = Person.Person.BusinessEntityID
+	Where Person.Person.FirstName='Aaron' AND Person.Person.LastName='Con'
+)
+ORDER BY sales.SalesOrderHeader.SalesOrderNumber
+
+
