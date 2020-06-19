@@ -4,25 +4,28 @@ USE AdventureWorks2017
 SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Production.Product.Name 
 FROM Sales.SalesOrderDetail JOIN Production.Product
 ON Production.Product.ProductID=Sales.SalesOrderDetail.ProductID 
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00'
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
 
 --------------------------------------------------------------------------------------------
 Задача 2 
 -
 USE AdventureWorks2017
-SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Sales.SalesOrderDetail.OrderQty,Production.Product.Name 
-FROM Sales.SalesOrderDetail JOIN Production.Product
-ON Production.Product.ProductID=Sales.SalesOrderDetail.ProductID 
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00'
+SELECT SalesOrderNumber,count(*) as productCount
+FROM Sales.SalesOrderHeader JOIN Sales.SalesOrderDetail
+on Sales.SalesOrderHeader.SalesOrderID = sales.SalesOrderDetail.SalesOrderID
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
+GROUP BY SalesOrderNumber
 
 --------------------------------------------------------------------------------------------
 Задача 3 
 -
 USE AdventureWorks2017
---There are no orders with more than 1 product in quantity
-SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Sales.SalesOrderDetail.OrderQty
-FROM Sales.SalesOrderDetail
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00' AND Sales.SalesOrderDetail.OrderQty Between 3 AND 9
+SELECT SalesOrderNumber,count(*) AS productCount
+FROM Sales.SalesOrderHeader JOIN Sales.SalesOrderDetail
+ON Sales.SalesOrderHeader.SalesOrderID = sales.SalesOrderDetail.SalesOrderID
+WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
+GROUP BY SalesOrderNumber
+HAVING count(*) BETWEEN 3 AND 9
 
 
 ---------------------------------------------------------------------------------------------
@@ -30,22 +33,34 @@ WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-11-01 00:00:00' AND Sales.Sale
 -
 USE AdventureWorks2017
 --Sales order number is basically sales order Id plus 'SO' from behind
-SELECT TOP 1 'SO'+ convert(VARCHAR(30),Sales.SalesOrderHeader.SalesOrderID+1)
+SELECT TOP 1 N'SO'+ convert(NVARCHAR(23),Sales.SalesOrderHeader.SalesOrderID+1)
 AS NextSalesOrderNumber
 FROM Sales.SalesOrderHeader
-
+ORDER BY sales.SalesOrderHeader.SalesOrderNumber DESC
 
 
 --------------------------------------------------------------------------------------------
 Задача 5 
 -
 USE AdventureWorks2017
-SELECT Person.Person.FirstName,Person.Person.MiddleName,Person.Person.LastName,Sales.SalesOrderHeader.OrderDate
-FROM Sales.SalesOrderHeader JOIN Sales.Customer
+SELECT DISTINCT Person.Person.FirstName,Person.Person.MiddleName,Person.Person.LastName
+FROM Sales.SalesOrderHeader 
+JOIN Sales.Customer
 ON Sales.SalesOrderHeader.CustomerID = Sales.Customer.CustomerID 
-Join Person.Person
-ON Sales.Customer.PersonID = Person.Person.BusinessEntityID 
-WHERE Sales.SalesOrderHeader.OrderDate < '2012-09-30 00:00:00' OR Sales.SalesOrderHeader.OrderDate > '2013-06-30 00:00:00'
+JOIN Person.Person
+ON Sales.Customer.PersonID = Person.Person.BusinessEntityID
+Where Sales.SalesOrderHeader.CustomerID IN
+(
+	SELECT Sales.SalesOrderHeader.CustomerID
+	FROM Sales.SalesOrderHeader
+	Where OrderDate > '2013-06-30'
+)
+AND Sales.SalesOrderHeader.CustomerID IN
+(
+	SELECT Sales.SalesOrderHeader.CustomerID
+	FROM Sales.SalesOrderHeader
+	Where OrderDate < '2012-09-30'
+)
 
 --------------------------------------------------------------------------------------------
 Задача 6
@@ -63,7 +78,7 @@ Where Sales.SalesOrderHeader.CustomerID = (
 	SELECT CustomerID 
 	From Sales.Customer JOIN Person.Person 
 	ON Sales.Customer.PersonID = Person.Person.BusinessEntityID
-	Where Person.Person.FirstName='Aaron' AND Person.Person.LastName='Con'
+	Where Person.Person.FirstName=N'Aaron' AND Person.Person.LastName=N'Con'
 )
 ORDER BY sales.SalesOrderHeader.SalesOrderNumber
 
