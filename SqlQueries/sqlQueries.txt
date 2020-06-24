@@ -1,19 +1,21 @@
 Задача 1 
 -
 USE AdventureWorks2017
-SELECT SalesOrderID,Sales.SalesOrderDetail.ModifiedDate,Production.Product.Name 
-FROM Sales.SalesOrderDetail JOIN Production.Product
-ON Production.Product.ProductID=Sales.SalesOrderDetail.ProductID 
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
+SELECT SalesOrderID,SOD.ModifiedDate AS OrderDate,PP.Name 
+FROM Sales.SalesOrderDetail AS SOD
+JOIN Production.Product  AS PP
+ON PP.ProductID=SOD.ProductID 
+WHERE SOD.ModifiedDate Between '2011-10-01' AND '2011-10-01 23:59:59'
 
 --------------------------------------------------------------------------------------------
 Задача 2 
 -
 USE AdventureWorks2017
 SELECT SalesOrderNumber,count(*) as productCount
-FROM Sales.SalesOrderHeader JOIN Sales.SalesOrderDetail
-on Sales.SalesOrderHeader.SalesOrderID = sales.SalesOrderDetail.SalesOrderID
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
+FROM Sales.SalesOrderHeader AS SOH
+JOIN Sales.SalesOrderDetail AS SOD
+on SOH.SalesOrderID = SOD.SalesOrderID
+WHERE SOD.ModifiedDate = '2011-10-01'
 GROUP BY SalesOrderNumber
 
 --------------------------------------------------------------------------------------------
@@ -21,16 +23,17 @@ GROUP BY SalesOrderNumber
 -
 USE AdventureWorks2017
 SELECT SalesOrderNumber,count(*) AS productCount
-FROM Sales.SalesOrderHeader JOIN Sales.SalesOrderDetail
-ON Sales.SalesOrderHeader.SalesOrderID = sales.SalesOrderDetail.SalesOrderID
-WHERE Sales.SalesOrderDetail.ModifiedDate = '2011-10-01'
+FROM Sales.SalesOrderHeader AS SOH
+JOIN Sales.SalesOrderDetail AS SOD
+ON SOH.SalesOrderID = SOD.SalesOrderID
+WHERE SOD.ModifiedDate = '2011-10-01'
 GROUP BY SalesOrderNumber
 HAVING count(*) BETWEEN 3 AND 9
 
 
 ---------------------------------------------------------------------------------------------
 Задача 4 
--
+- 
 USE AdventureWorks2017
 --Sales order number is basically sales order Id plus 'SO' from behind
 SELECT TOP 1 N'SO'+ convert(NVARCHAR(23),Sales.SalesOrderHeader.SalesOrderID+1)
@@ -43,19 +46,19 @@ ORDER BY sales.SalesOrderHeader.SalesOrderNumber DESC
 Задача 5 
 -
 USE AdventureWorks2017
-SELECT DISTINCT Person.Person.FirstName,Person.Person.MiddleName,Person.Person.LastName
-FROM Sales.SalesOrderHeader 
-JOIN Sales.Customer
-ON Sales.SalesOrderHeader.CustomerID = Sales.Customer.CustomerID 
-JOIN Person.Person
-ON Sales.Customer.PersonID = Person.Person.BusinessEntityID
-Where Sales.SalesOrderHeader.CustomerID IN
+SELECT DISTINCT PP.FirstName,PP.MiddleName,PP.LastName
+FROM Sales.SalesOrderHeader AS SOH
+JOIN Sales.Customer AS SC
+ON SOH.CustomerID = SC.CustomerID 
+JOIN Person.Person AS PP
+ON SC.PersonID = PP.BusinessEntityID
+Where SOH.CustomerID IN
 (
 	SELECT Sales.SalesOrderHeader.CustomerID
 	FROM Sales.SalesOrderHeader
 	Where OrderDate > '2013-06-30'
 )
-AND Sales.SalesOrderHeader.CustomerID IN
+AND SOH.CustomerID IN
 (
 	SELECT Sales.SalesOrderHeader.CustomerID
 	FROM Sales.SalesOrderHeader
@@ -66,20 +69,20 @@ AND Sales.SalesOrderHeader.CustomerID IN
 Задача 6
 -
 USE AdventureWorks2017
-
 SELECT 
-LAG(Sales.SalesOrderHeader.SalesOrderNumber)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) previousNumber,
-LAG(Sales.SalesOrderHeader.OrderDate)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) previousDate,
-LEAD(Sales.SalesOrderHeader.SalesOrderNumber)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) futureNumber,
-LEAD(Sales.SalesOrderHeader.OrderDate)OVER(ORDER BY sales.SalesOrderHeader.SalesOrderNumber) futureDate,
-Sales.SalesOrderHeader.SalesOrderNumber , Sales.SalesOrderHeader.OrderDate
-FROM Sales.SalesOrderHeader
-Where Sales.SalesOrderHeader.CustomerID = (
+ROW_NUMBER() OVER (ORDER BY SOH.SalesOrderNumber) AS ArrangementOfOrders,
+LAG(SOH.SalesOrderNumber)OVER(ORDER BY SOH.SalesOrderNumber) previousNumber,
+LAG(SOH.OrderDate)OVER(ORDER BY SOH.SalesOrderNumber) previousDate,
+LEAD(SOH.SalesOrderNumber)OVER(ORDER BY SOH.SalesOrderNumber) futureNumber,
+LEAD(SOH.OrderDate)OVER(ORDER BY SOH.SalesOrderNumber) futureDate,
+SOH.SalesOrderNumber , SOH.OrderDate
+FROM Sales.SalesOrderHeader AS SOH
+Where SOH.CustomerID = (
 	SELECT CustomerID 
 	From Sales.Customer JOIN Person.Person 
 	ON Sales.Customer.PersonID = Person.Person.BusinessEntityID
 	Where Person.Person.FirstName=N'Aaron' AND Person.Person.LastName=N'Con'
 )
-ORDER BY sales.SalesOrderHeader.SalesOrderNumber
+ORDER BY SOH.SalesOrderNumber
 
 
