@@ -5,7 +5,7 @@ SELECT SalesOrderID,SOD.ModifiedDate AS OrderDate,PP.Name
 FROM Sales.SalesOrderDetail AS SOD
 JOIN Production.Product  AS PP
 ON PP.ProductID=SOD.ProductID 
-WHERE SOD.ModifiedDate Between '2011-10-01' AND '2011-10-01 23:59:59'
+WHERE SOD.ModifiedDate Between '2011-10-01' AND '2011-10-01 23:59:59.999'
 
 --------------------------------------------------------------------------------------------
 Задача 2 
