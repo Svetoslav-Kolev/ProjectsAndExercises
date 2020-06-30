@@ -7,7 +7,7 @@ JOIN Sales.SalesOrderDetail AS SOD
 ON SOH.SalesOrderID = SOD.SalesOrderID
 JOIN Production.Product AS PP
 ON PP.ProductID = SOD.ProductID
-WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < DATEADD(day,1 ,'20111001')
 
 --------------------------------------------------------------------------------------------
 Задача 2 
@@ -17,7 +17,7 @@ SELECT SalesOrderNumber,count(*) as productCount
 FROM Sales.SalesOrderHeader AS SOH
 JOIN Sales.SalesOrderDetail AS SOD
 on SOH.SalesOrderID = SOD.SalesOrderID
-WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < DATEADD(day,1 ,'20111001')
 GROUP BY SalesOrderNumber
 
 --------------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@ SELECT SalesOrderNumber,count(*) AS productCount
 FROM Sales.SalesOrderHeader AS SOH
 JOIN Sales.SalesOrderDetail AS SOD
 ON SOH.SalesOrderID = SOD.SalesOrderID
-WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < DATEADD(day,1 ,'20111001')
 GROUP BY SalesOrderNumber
 HAVING count(*) BETWEEN 3 AND 9
 
