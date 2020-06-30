@@ -1,11 +1,13 @@
 Задача 1 
 -
 USE AdventureWorks2017
-SELECT SalesOrderID,SOD.ModifiedDate AS OrderDate,PP.Name 
-FROM Sales.SalesOrderDetail AS SOD
-JOIN Production.Product  AS PP
-ON PP.ProductID=SOD.ProductID 
-WHERE SOD.ModifiedDate Between '2011-10-01' AND '2011-10-01 23:59:59.999'
+SELECT SOH.SalesOrderNumber,SOH.OrderDate,PP.Name
+FROM Sales.SalesOrderHeader AS SOH
+JOIN Sales.SalesOrderDetail AS SOD
+ON SOH.SalesOrderID = SOD.SalesOrderID
+JOIN Production.Product AS PP
+ON PP.ProductID = SOD.ProductID
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
 
 --------------------------------------------------------------------------------------------
 Задача 2 
@@ -15,7 +17,7 @@ SELECT SalesOrderNumber,count(*) as productCount
 FROM Sales.SalesOrderHeader AS SOH
 JOIN Sales.SalesOrderDetail AS SOD
 on SOH.SalesOrderID = SOD.SalesOrderID
-WHERE SOD.ModifiedDate = '2011-10-01'
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
 GROUP BY SalesOrderNumber
 
 --------------------------------------------------------------------------------------------
@@ -26,7 +28,7 @@ SELECT SalesOrderNumber,count(*) AS productCount
 FROM Sales.SalesOrderHeader AS SOH
 JOIN Sales.SalesOrderDetail AS SOD
 ON SOH.SalesOrderID = SOD.SalesOrderID
-WHERE SOD.ModifiedDate = '2011-10-01'
+WHERE SOH.OrderDate >= '20111001' and SOH.OrderDate < '20111002'
 GROUP BY SalesOrderNumber
 HAVING count(*) BETWEEN 3 AND 9
 
@@ -84,5 +86,3 @@ Where SOH.CustomerID = (
 	Where Person.Person.FirstName=N'Aaron' AND Person.Person.LastName=N'Con'
 )
 ORDER BY SOH.SalesOrderNumber
-
-
