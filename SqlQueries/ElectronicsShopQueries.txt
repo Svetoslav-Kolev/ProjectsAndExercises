@@ -1,0 +1,69 @@
+First Query
+
+Select * From Products
+Where CHARINDEX('Comp',ProductName) > 0
+Select * From Products
+Where CHARINDEX('Wash',ProductName) > 0
+
+----------------------------------------------
+
+Second Query
+
+USE ElectronicsShopDB
+DECLARE @StartOfMonth DATETIME2(7) SET @StartOfMonth = DATEADD(month, DATEDIFF(month, 0, SYSDATETIME()), 0) 
+SELECT ProductName,QuantitySoldLastMonth,AverageRating FROM
+(
+SELECT DISTINCT P.ProductName ,P.ProductID
+,AVG(CR.Rating) as AverageRating
+FROM Products as P
+FULL OUTER JOIN CustomerReviews as CR
+ON (P.ProductID = CR.ProductID)
+GROUP BY P.ProductID,P.ProductName
+) as FirstPart
+FULL OUTER JOIN 
+(
+SELECT SUM(Quantity) as QuantitySoldLastMonth,OD.ProductID
+FROM OrderDetails as OD
+JOIN
+OrderHistory AS OH 
+ON(OH.OrderID = OD.OrderID)
+WHERE OH.OrderDate>=DATEADD(MONTH,-1,@StartOfMonth) AND OH.OrderDate<@StartOfMonth
+GROUP BY ProductID
+) as SecondPart
+ON(FirstPart.ProductID = SecondPart.ProductID)
+
+-------------------------------------------------
+
+Third Query 
+
+
+Use ElectronicsShopDB
+DECLARE @StartOfYear AS DATE  = DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) 
+SELECT E.FirstName , E.LastName,E.StartDate,COUNT(*) AS NumberOfOrders,SUM(OH.TotalPrice) AS TotalPrice
+FROM Employees as E
+JOIN OrderHistory AS OH
+ON E.EmployeeID = OH.EmployeeID
+Where E.StartDate >= @StartOfYear AND E.StartDate<=DATEADD(MONTH,1,@StartOfYear)
+GROUP BY E.FirstName,E.LastName ,E.StartDate
+
+
+-----------------------------------------------
+Fourth Query
+
+USE ElectronicsShopDB
+DECLARE @StartOfYear AS DATE  = DATEADD(yy, DATEDIFF(yy, 0, GETDATE()), 0) 
+SELECT   COALESCE(ThisYear.Months, LastYear.Months) as [Month], EarningsThisYear,NumberOfOrdersThisYear,EarningsLastYear,NumberOfOrdersLastYear FROM
+(
+SELECT MONTH(OH.OrderDate) AS Months, SUM(OH.TotalPrice) AS EarningsThisYear  , COUNT(*) AS NumberOfOrdersThisYear
+FROM OrderHistory AS OH
+WHERE OH.OrderDate >=@StartOfYear AND OH.OrderDate<=GETDATE()
+GROUP BY  MONTH(OH.OrderDate)
+) as ThisYear
+FULL OUTER JOIN
+(
+SELECT MONTH(OH.OrderDate) AS Months, SUM(OH.TotalPrice) AS EarningsLastYear  , COUNT(*) AS NumberOfOrdersLastYear
+FROM OrderHistory AS OH
+WHERE OH.OrderDate >=DATEADD(year,-1,@StartOfYear) AND OH.OrderDate<@StartOfYear
+GROUP BY  MONTH(OH.OrderDate)
+) as LastYear
+ON(ThisYear.Months= LastYear.Months)
