@@ -1,0 +1,32 @@
+﻿@model Kursova.ViewModels.ShopViewModel
+@{
+    ViewData["Title"] = "Shop";
+}
+<h1>You are logged in as @ViewData["User"]</h1>
+<h1>Shop</h1>
+<div>
+    <h4>Clothing</h4>
+    <a asp-controller="Shop" asp-action="Outfits">Outfits</a>
+    <hr />
+    @foreach (var piece in Model.AllClothing)
+    {
+        <h3>@piece.ClothingName</h3>
+        <h3>Color - @piece.Color</h3>
+        <h3>Material - @piece.Material</h3>
+        <h3>Price - @piece.Price</h3>
+
+        <form asp-action="Order">
+            <input asp-for="selectedClothingID" value="@piece.ClothingID" />
+            <button type="submit" value="Create">
+                Order
+            </button>
+        </form>
+
+        //<a method="get" asp-controller="Shop" asp-action="Order" asp-route-id="@piece.ClothingID">Order</a>
+
+    }
+</div>
+<div>
+    <a asp-action="AddClothes">Add Clothing</a>
+</div>
+

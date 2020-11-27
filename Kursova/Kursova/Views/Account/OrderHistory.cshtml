@@ -1,0 +1,13 @@
+﻿@model Kursova.ViewModels.OrderHistoryViewModel
+@{
+    ViewData["Title"] = "OrderHistory";
+}
+
+<h1>OrderHistory</h1>
+@foreach (var order in Model.myOrders)
+{
+    <h1>Order Date - @order.Date</h1>
+    <h1>Order Price - @order.TotalPrice</h1>
+    <h1>Order Address - @order.DeliveryAddress</h1>
+    <h1>---------------------------------------------</h1>
+}

@@ -1,0 +1,11 @@
+﻿@model Kursova.ViewModels.AllCardsViewModel
+@{
+    ViewData["Title"] = "AllCards";
+}
+
+<h1>AllCards</h1>
+@foreach (var card in Model.userCards)
+{
+    <h3>card number - @card.CardNumber</h3>
+}
+

@@ -1,0 +1,16 @@
+﻿@model Kursova.ViewModels.OutfitsViewModel
+@{
+    ViewData["Title"] = "Outfits";
+}
+
+<h1>Outfits</h1>
+@foreach (var outfit in Model.AllOutfits)
+{
+    <h1>@outfit.OutfitName</h1>
+    foreach (var clothing in outfit.Clothes)
+    {
+        <h3>@clothing.ClothingName</h3>
+    }
+}
+<a asp-action="AddOutfit">Add Outfit</a>
+

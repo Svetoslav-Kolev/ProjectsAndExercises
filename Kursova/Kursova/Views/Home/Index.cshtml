@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome @ViewData["User"]</h1>
+    @if (ViewData["Authenticated"] == "True")
+    {
+        <p><a href="/Shop/Shop">Shop Here!</a></p>
+        <p><a href="/Account/AddCard">Add Credit Card to your account</a></p>
+        <p><a href="/Account/AllCards">your Cards</a></p>
+        <div><a href="/Account/OrderHistory">Order History</a></div>
+    }
+    else
+    {
+        <p><a href="/Home/Login">Shop Here!</a></p>
+        <div><a href="/Home/Register">Register Here</a></div>
+        <div><a href="/Home/Login">Login Here</a></div>
+
+    }
+</div>
