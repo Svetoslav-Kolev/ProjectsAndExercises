@@ -12,7 +12,7 @@ namespace Kursova.Models.Context
         public OutfitsContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<OutfitsContext>();
-            optionsBuilder.UseSqlServer("Server=DESKTOP-1ADSAV1\\SQLEXPRESS01;Database=OutfitsDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=localhost;Database=OutfitsDB;Trusted_Connection=True;");
 
             return new OutfitsContext(optionsBuilder.Options);
         }
