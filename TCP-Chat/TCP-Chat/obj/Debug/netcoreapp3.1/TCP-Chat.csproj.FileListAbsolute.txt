@@ -1,0 +1,119 @@
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.exe
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.deps.json
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.json
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.dev.json
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\App.g.cs
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.cache
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.lref
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.g.resources
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfoInputs.cache
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfo.cs
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CoreCompileInputs.cache
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.genruntimeconfig.cache
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csprojAssemblyReference.cache
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.g.cs
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.baml
+D:\Visual Studio Projects\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.exe
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.deps.json
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.json
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.dev.json
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.dll
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.pdb
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csprojAssemblyReference.cache
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.g.cs
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\App.g.cs
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\GeneratedInternalTypeHelper.g.cs
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.cache
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.lref
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.baml
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.g.resources
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfo.cs
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.dll
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.pdb
+C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.genruntimeconfig.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.exe
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.deps.json
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.json
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.dev.json
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csprojAssemblyReference.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.g.cs
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\App.g.cs
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.lref
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.baml
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.g.resources
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfoInputs.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfo.cs
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CoreCompileInputs.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.genruntimeconfig.cache
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\Microsoft.Expression.Interactions.dll
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\System.Windows.Interactivity.dll
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CopyComplete
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.dll
+D:\Visual Studio Projects\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.pdb
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csprojAssemblyReference.cache
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.g.cs
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\App.g.cs
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.cache
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.lref
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.dll
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.pdb
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.exe
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.deps.json
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.json
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.dev.json
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.dll
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.pdb
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\Microsoft.Expression.Interactions.dll
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\System.Windows.Interactivity.dll
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.dll
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.pdb
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.baml
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.g.resources
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfo.cs
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CopyComplete
+C:\Users\User\Desktop\TCP-Chat2\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.genruntimeconfig.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.exe
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.deps.json
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.json
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.runtimeconfig.dev.json
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\Microsoft.Expression.Interactions.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\System.Windows.Interactivity.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\TCPClientServer.pdb
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csprojAssemblyReference.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.g.cs
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\App.g.cs
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat_MarkupCompile.lref
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\MainWindow.baml
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.g.resources
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfoInputs.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.AssemblyInfo.cs
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CoreCompileInputs.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.csproj.CopyComplete
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.pdb
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\TCP-Chat.genruntimeconfig.cache
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\PersonalChatWindow.g.cs
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\Views\PersonalChatWindow.baml
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\TCP-Chat\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

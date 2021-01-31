@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "FszVNfRjDkjtiehisa0BrC17StPmUIS/S6NCtagclyvEeD5YCp1EcEcyGV5LWgpDmZgqwD349jzhbqpCUFl40Q==",
+  "success": true,
+  "projectFilePath": "D:\\Visual Studio Projects\\TCP-Chat3\\TCP-Chat\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
