@@ -10,20 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TCPClientServer;
 
-public class StateObject // State object for reading client data asynchronously
-{
-    // Size of receive buffer.  
-    public const int BufferSize = 1024;
 
-    // Receive buffer.  
-    public byte[] buffer = new byte[BufferSize];
-
-    // Received data string.
-    public StringBuilder sb = new StringBuilder();
-
-    // Client socket.
-    public Socket workSocket = null;
-}
 public class Server
 {
     public IPAddress address { get; private set; }
@@ -40,6 +27,8 @@ public class Server
 
     public static ManualResetEvent allDone = new ManualResetEvent(false); //signals thread to stop or continue
 
+    CancellationTokenSource source;
+
     public Server(IPAddress address, int port)
     {
         this.address = address;
@@ -49,22 +38,56 @@ public class Server
         this.endPoint = new IPEndPoint(address, port);
 
         this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
         connectedClients = new Dictionary<string, Guid>();
+
         connections = new List<Client>();
     }
     public void OpenServer()
     {
-        this.socket.Bind(endPoint);
+        // this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        if (this.socket.IsBound == true)
+        {
+            try
+            {
+                this.socket.Listen(10);
+            }
+            catch (Exception)
+            {
 
-        this.socket.Listen(10);
+                this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+                this.socket.Bind(endPoint);
+                this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                this.socket.Listen(10);
+                Task.Run(() => acceptConnections());
 
-        Task.Run(() => acceptConnections());
+            }
+            this.IsRunning = true;
+        }
+        else
+        {
+            this.IsRunning = true;
+
+            this.socket.Bind(endPoint);
+            this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            this.socket.Listen(10);
+
+
+            //CancellationToken token = source.Token;
+
+            Task.Run(() => acceptConnections());
+        }
+
+
+
 
     }
     public void StopServer()
     {
         if (this.IsRunning == true)
         {
+            this.IsRunning = false;
+
             foreach (var client in connections)
             {
                 lock (client)
@@ -74,40 +97,57 @@ public class Server
                     client.socket.Shutdown(SocketShutdown.Both);
                     client.socket.Close();
                 }
-            }
-            this.IsRunning = false;
-        }
 
+            }
+
+            connectedClients.Clear();
+            connections.Clear();
+            this.socket.Close();
+        }
     }
     public void acceptConnections()
     {
-        while (true)
+        while (IsRunning)
         {
+
             allDone.Reset(); // set event to nonsignaled state
-                             //Socket handler = this.socket.Accept();
 
             this.socket.BeginAccept(new AsyncCallback(AcceptCallback), this.socket);
 
             allDone.WaitOne(); // waits for a connection
         }
     }
-    public void AcceptCallback(IAsyncResult ar)
+    public async void AcceptCallback(IAsyncResult ar)
     {
-        allDone.Set(); //signals main thread to continue
+        Socket handler = null;
 
-        Socket listener = (Socket)ar.AsyncState;
-        Socket handler = listener.EndAccept(ar);  // accepts connection and lets the handler socket deal with communications
+        if (IsRunning != false)
+        {
+
+            allDone.Set(); //signals main thread to continue
+
+            Socket listener = (Socket)ar.AsyncState;
+            handler = listener.EndAccept(ar); // accepts connection and lets the handler socket deal with communications
+
+        }
+        else
+        {
+            allDone.Set();
+            return;
+        }
         var ConnectionPacket = tryReadObject(handler);
 
         if (ConnectionPacket is ConnectionPackage packet)
         {
 
-            if (!connectedClients.Keys.Contains(packet.clientUsername))
+            if (!connectedClients.Keys.Contains(packet.sender))
             {
-                connectedClients[packet.clientUsername] = packet.userId;
-                Client newClient = new Client() { id = packet.userId, Username = packet.clientUsername };
+                connectedClients[packet.sender] = packet.userId;
+                Client newClient = new Client() { id = packet.userId, Username = packet.sender };
                 newClient.socket = handler;
                 connections.Add(newClient);
+
+
                 newClient.sendMessage("You have been Connected!");
 
                 Task.Run(() => receiveMessagesTask(newClient.socket));
@@ -115,8 +155,8 @@ public class Server
             }
             else
             {
-                DisconnectionPackage userTakenPacket = new DisconnectionPackage(packet.clientUsername, "Username Taken");
-                TrySendObject(userTakenPacket, handler);
+                DisconnectionPackage userTakenPacket = new DisconnectionPackage(packet.sender, "Username Taken");
+                await TrySendObject(userTakenPacket, handler);
                 handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
             }
@@ -142,34 +182,57 @@ public class Server
                         Client targetClient = connections.Where(c => c.Username == package.targetUsername).FirstOrDefault();
                         if (targetClient != null)
                         {
-                            TrySendObject(receivedPackage, targetClient.socket);
+                            await TrySendObject(receivedPackage, targetClient.socket);
                         }
                         else
                         {
-                            TrySendObject(new MessagePacket("User you are trying to reach is not currently online!", package.sender, true), clientSocket);
+                            await TrySendObject(new MessagePacket("User you are trying to reach is not currently online!", package.sender, true), clientSocket);
                         }
                     }
                     else
                     {
                         foreach (var connection in connections)
                         {
-                            TrySendObject(receivedPackage, connection.socket);
+                            await TrySendObject(receivedPackage, connection.socket);
                         }
                     }
                 }
                 else if (receivedPackage is DisconnectionPackage dcPackage)
                 {
-                    connectedClients.Remove(dcPackage.username);
+                    connectedClients.Remove(dcPackage.sender);
 
                     RemoveConnection(clientSocket);
                 }
-                else if (receivedPackage is ImagePacket imgPacket)
+                else if (receivedPackage is PrepPackage prepPackage)
                 {
-                    TrySendObject(imgPacket, clientSocket);
+                    var receivedImage = tryReadBigObject(clientSocket, prepPackage.fileSizeInBytes);
+                    if (receivedImage is ImagePacket imgPacket)
+                    {
+                        if (imgPacket.isPersonal == true)
+                        {
+                            Client targetClient = connections.Where(c => c.Username == imgPacket.targetUsername).FirstOrDefault();
+                            if (targetClient != null)
+                            {
+                                await TrySendObject(prepPackage, targetClient.socket);
+
+                                await TrySendObject(receivedImage, targetClient.socket);
+                            }
+                        }
+                        else
+                        {
+                            foreach (var client in connections)
+                            {
+                                await TrySendObject(prepPackage, client.socket);
+
+                                await TrySendObject(receivedImage, client.socket);
+                            }
+                        }
+                    }
+
                 }
 
             }
-            await Task.Delay(20);
+            await Task.Delay(10);
         }
 
     }
@@ -180,8 +243,44 @@ public class Server
         {
             List<string> usernames = connectedClients.Keys.OrderBy(username => username).ToList();
             UsersPacket usersPacket = new UsersPacket(usernames);
-            TrySendObject(usersPacket, clientSocket);
+            await TrySendObject(usersPacket, clientSocket);
             await Task.Delay(3000);
+        }
+
+    }
+    private static object tryReadBigObject(Socket clientSocket, long fileSize)
+    {
+        byte[] data = new byte[fileSize];
+        try
+        {
+            using (NetworkStream stream = new NetworkStream(clientSocket))
+            {
+                int totalRead = 0;
+                int offset = 0;
+                while (true)
+                {
+                    offset = totalRead;
+                    totalRead += stream.Read(data, offset, (int)fileSize - totalRead);
+                    if (totalRead >= fileSize)
+                    {
+                        break;
+                    }
+
+                }
+
+                MemoryStream memory = new MemoryStream(data, 0, (int)fileSize);
+                memory.Position = 0;
+
+                BinaryFormatter formatter = new BinaryFormatter();
+                var obj = formatter.Deserialize(memory);
+
+                return obj;
+            }
+        }
+        catch (Exception e)
+        {
+
+            throw e;
         }
 
     }
@@ -192,13 +291,6 @@ public class Server
         {
             using (NetworkStream stream = new NetworkStream(clientSocket))
             {
-                //int receivedSize = 0;
-                //while (clientSocket.Available!=0)
-                //{
-                //    receivedSize += stream.Read(data, 0, data.Length);
-                //}
-
-                //MemoryStream memory = new MemoryStream(data, 0, receivedSize);
                 stream.Read(data, 0, data.Length);
                 MemoryStream memory = new MemoryStream(data, 0, data.Length);
                 memory.Position = 0;
@@ -215,7 +307,7 @@ public class Server
             return null;
         }
     }
-    public static void TrySendObject(object obj, Socket clientSocket)
+    public static async Task TrySendObject(object obj, Socket clientSocket)
     {
         try
         {
@@ -229,6 +321,7 @@ public class Server
 
                 memory.Position = 0;
                 stream.Write(newObj, 0, newObj.Length);
+                await Task.Delay(3);
             }
 
         }
@@ -245,13 +338,5 @@ public class Server
         handler.Shutdown(SocketShutdown.Both);
 
     }
-    //bool SocketConnected(Socket s)
-    //{
-    //    bool part1 = s.Poll(1000, SelectMode.SelectRead);
-    //    bool part2 = (s.Available == 0);
-    //    if (part1 && part2)
-    //        return false;
-    //    else
-    //        return true;
-    //}
+
 }

@@ -24,31 +24,52 @@ namespace TCPClientServer
 
         public Client()
         {
-            //this.ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[2]; // only needed if you wish to send your ip as well
+            this.ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1]; // only needed if you wish to send your ip as well
 
             this.isConnected = false;
-
+            
             this.id = Guid.NewGuid();
+
+
         }
-        public void setEndPoint(IPAddress ip, int port)
+        public async  Task<bool> setEndPoint(IPAddress ip, int port)
         {
-            this.socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            this.socket.ReceiveBufferSize = 8192;
-
             this.endPoint = new IPEndPoint(ip, port);
-
             try
             {
+                Thread.Sleep(3);
+                this.socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 this.socket.Connect(endPoint);
-                TrySendObject(new ConnectionPackage(this.id, this.Username));
-                this.isConnected = true;
+                if (SocketConnected(this.socket))
+                {
+                    this.isConnected = true;
+                    TrySendObject(new ConnectionPackage(this.id, this.Username));
+                    return true;
+                }
+                else
+                {
+                    this.isConnected = false;
+                    this.socket.Shutdown(SocketShutdown.Both);
+                    this.socket.Close();
+                    return false;
+                }
+                
             }
             catch (SocketException e)
             {
-
+                this.isConnected = false;
                 throw e;
             }
 
+        }
+        bool SocketConnected(Socket s)
+        {
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
         }
         public void TrySendObject(object obj)
         {
@@ -103,18 +124,10 @@ namespace TCPClientServer
                         byte[] data = new byte[this.socket.ReceiveBufferSize];
                         using (NetworkStream stream = new NetworkStream(socket))
                         {
-                            //int receivedSize = 0;
-                            //while (this.socket.Available != 0)
-                            //{
-                            //    receivedSize += stream.Read(data, 0, data.Length);
-                            //}
-
-                            //MemoryStream memory = new MemoryStream(data, 0, receivedSize);
 
                             stream.Read(data, 0, data.Length);
-                            MemoryStream memory = new MemoryStream(data, 0, data.Length);       
+                            MemoryStream memory = new MemoryStream(data, 0, data.Length);
                             memory.Position = 0;
-
 
                             BinaryFormatter formatter = new BinaryFormatter();
                             try
@@ -123,11 +136,11 @@ namespace TCPClientServer
                             }
                             catch (Exception)
                             {
-
                                 receivedObject = null;
                             }
-                            if (receivedObject is DisconnectionPackage package && package.username == Username)
-                            {
+
+                            if (receivedObject is DisconnectionPackage package)
+                            {                              
                                 this.socket.Shutdown(SocketShutdown.Both);
                                 this.socket.Close();
                                 this.isConnected = false;
@@ -141,9 +154,13 @@ namespace TCPClientServer
                             {
                                 return usersPacket.Usernames;
                             }
-                            else if (receivedObject is ImagePacket imagePacket)
+                            else if (receivedObject is PrepPackage prepPackage)
                             {
-                                return imagePacket.Imagebmp;
+                                var receivedImage = tryReadBigObject(this.socket, prepPackage.fileSizeInBytes);
+                                if (receivedImage is ImagePacket imgPacket)
+                                {
+                                    return imgPacket;
+                                }
                             }
                             else
                             {
@@ -158,9 +175,45 @@ namespace TCPClientServer
                     }
 
                 }
-                await Task.Delay(20);
+                await Task.Delay(10);
             }
             return receivedObject;
+        }
+        private static object tryReadBigObject(Socket clientSocket, long fileSize)
+        {
+            byte[] data = new byte[fileSize];
+            try
+            {
+                using (NetworkStream stream = new NetworkStream(clientSocket))
+                {
+                    int totalRead = 0;
+                    int offset = 0;
+                    while (true)
+                    {
+                        offset = totalRead;
+                        totalRead += stream.Read(data, offset, (int)fileSize - totalRead);
+                        if (totalRead >= fileSize)
+                        {
+                            break;
+                        }
+
+                    }
+
+                    MemoryStream memory = new MemoryStream(data, 0, (int)fileSize);
+                    memory.Position = 0;
+
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    var obj = formatter.Deserialize(memory);
+
+                    return obj;
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+
         }
         public void TryDisconnect()
         {

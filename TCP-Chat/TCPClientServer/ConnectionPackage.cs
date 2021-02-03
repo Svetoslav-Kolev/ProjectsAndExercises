@@ -5,14 +5,20 @@ using System.Text;
 namespace TCPClientServer
 {
     [Serializable]
-    public class ConnectionPackage
+    public class ConnectionPackage : Package
     {
-        public string clientUsername { get;  set; }
+        public string sender { get;  set; }
         public Guid userId { get; set; }
+
+        public string message { get; set; }
         public ConnectionPackage(Guid id,string username)
         {
             this.userId = id;
-            this.clientUsername = username;
+            this.sender = username;
+        }
+        public ConnectionPackage(string username)
+        {
+            this.sender = username;
         }
     }
 }

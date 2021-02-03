@@ -25,25 +25,25 @@ namespace ChatServer
     public partial class MainWindow : Window
     {
         static IPHostEntry iphostinfo = Dns.GetHostEntry(Dns.GetHostName());
-        static IPAddress ip = iphostinfo.AddressList[3];
+        static IPAddress ip = iphostinfo.AddressList[1]; //may have to be changed depending on the device and network on which the server runs 
         Server server = new Server(ip, 11000);
         public MainWindow()
         {
             InitializeComponent();
             Closing += StopServer;
         }
-        public  void StartServer(object senderObj, System.EventArgs e)
+        public void StartServer(object senderObj, System.EventArgs e)
         {
-            
-            server.OpenServer();
 
+            server.OpenServer();
+            
             Start.IsEnabled = false;
             Stop.IsEnabled = true;
-            
+
         }
-        public void StopServer(object sender,  EventArgs e)
+        public void StopServer(object sender, EventArgs e)
         {
-            server.StopServer();
+            Task.Run(() => server.StopServer());
 
             Start.IsEnabled = true;
             Stop.IsEnabled = false;

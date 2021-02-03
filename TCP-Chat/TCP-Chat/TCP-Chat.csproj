@@ -15,4 +15,8 @@
     <ProjectReference Include="..\TCPClientServer\TCPClientServer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Behaviors\" />
+  </ItemGroup>
+
 </Project>

@@ -1,17 +1,17 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace TCPClientServer
 {
     [Serializable]
-    public class DisconnectionPackage
+    public class DisconnectionPackage : Package
     {
-        public string username { get; set; }
+        public string sender { get; set; }
         public string reason { get; set; }
-        public DisconnectionPackage(string username,string reason)
+        public DisconnectionPackage(string sender,string reason)
         {
-            this.username = username;
+            this.sender = sender;
             this.reason = reason;
         }
     }

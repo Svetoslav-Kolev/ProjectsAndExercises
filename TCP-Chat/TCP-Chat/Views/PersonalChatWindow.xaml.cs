@@ -30,6 +30,7 @@ namespace TCP_Chat.Views
             viewModel.targetUsername = targetName;
             target = targetName;
             Closing += PersonalChatWindow_Closing;
+            
 
         }
 
@@ -42,7 +43,31 @@ namespace TCP_Chat.Views
 
         public void AddMessage(string message)
         {
-            viewModel.messages.Add(message);
+            viewModel.messages.Add(new ViewItemModel() { message = target + ":" + message });
+
+
+            //add autoscrolling when first collection message is added
+            AddAutoScrolling();
+        }
+        public void AddImage(BitmapImage img)
+        {
+            viewModel.messages.Add(new ViewItemModel() { bmpImage = img , message = target + " sent an Image!" });
+
+            //add autoscrolling when first collection message is added
+            AddAutoScrolling();
+        }
+        public void AddAutoScrolling()
+        {
+            viewModel.messages.CollectionChanged += (sender, e) =>
+            {
+                if (e.NewItems != null)
+                {
+
+                    Decorator border = VisualTreeHelper.GetChild(ChatTextBlock, 0) as Decorator;
+                    ScrollViewer scroll = border.Child as ScrollViewer;
+                    scroll.ScrollToBottom();
+                }
+            };
         }
     }
 }

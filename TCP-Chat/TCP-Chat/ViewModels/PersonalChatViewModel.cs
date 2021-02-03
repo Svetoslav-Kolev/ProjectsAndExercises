@@ -5,21 +5,30 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using TCP_Chat.Commands;
+using TCP_Chat.ValueConverters;
 using TCPClientServer;
 
 namespace TCP_Chat.ViewModels
 {
-   public class PersonalChatViewModel : INotifyPropertyChanged
+    public class PersonalChatViewModel : INotifyPropertyChanged
     {
-        
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public string targetUsername { get; set; }
+        private string _targetUsername;
+        public string targetUsername
+        {
+            get { return _targetUsername; }
+            set { _targetUsername = value; OnPropertyChanged("currentMessage"); }
+        }
         public Client client { get; set; }
-        private ObservableCollection<object> _messages = new ObservableCollection<object>();
-        public ObservableCollection<object> messages
+        private ObservableCollection<ViewItemModel> _messages = new ObservableCollection<ViewItemModel>();
+        public ObservableCollection<ViewItemModel> messages
         {
             get { return _messages; }
             set { _messages = value; OnPropertyChanged("messages"); }
@@ -32,9 +41,9 @@ namespace TCP_Chat.ViewModels
             set { _currentMessage = value; OnPropertyChanged("currentMessage"); }
         }
         public PersonalChatViewModel()
-        {          
-            messages = new ObservableCollection<object>();
-           
+        {
+            messages = new ObservableCollection<ViewItemModel>();
+
         }
         public void OnPropertyChanged(string propertyName)
         {
@@ -77,12 +86,14 @@ namespace TCP_Chat.ViewModels
         {
             return true;
         }
-        private void SendFile()
+        private async Task SendFile()
         {
             if (this.client.isConnected)
             {
                 fileDialog = new OpenFileDialog();
                 fileDialog.ShowDialog();
+                fileDialog.DefaultExt = ".png";
+                fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
 
                 string filePath = fileDialog.FileName;
                 ImagePacket imagePacket = new ImagePacket();
@@ -90,11 +101,31 @@ namespace TCP_Chat.ViewModels
                 imagePacket.isPersonal = true;
                 imagePacket.sender = this.client.Username;
                 imagePacket.targetUsername = targetUsername;
+
+
+                PrepPackage ImageBytes = new PrepPackage();
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, imagePacket);
+                    ImageBytes.fileSizeInBytes = stream.Length;
+                }
+
+                this.client.TrySendObject(ImageBytes);
+                await Task.Delay(20);
                 this.client.TrySendObject(imagePacket);
+
+                BitmapToImageConverter bmpConverter = new BitmapToImageConverter();
+                var image = bmpConverter.Convert(imagePacket.Imagebmp);
+
+                messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)image, message = client.Username + "sent and Image!" });
+
             }
             else
             {
-                messages.Add("not connected");
+
+                messages.Add(new ViewItemModel() { message = "Not connected" });
+
             }
 
         }
@@ -106,11 +137,20 @@ namespace TCP_Chat.ViewModels
         {
             if (this.client.isConnected)
             {
-                MessagePacket personalMessage = new MessagePacket(currentMessage, targetUsername, true);
-                personalMessage.sender = this.client.Username;
-                this.client.TrySendObject(personalMessage);
-                messages.Add(personalMessage.message);
-                currentMessage = "";
+                if (currentMessage != string.Empty && currentMessage != "" && currentMessage.Length <= 150)
+                {
+                    MessagePacket personalMessage = new MessagePacket(currentMessage, targetUsername, true);
+                    personalMessage.sender = this.client.Username;
+                    this.client.TrySendObject(personalMessage);
+
+                    messages.Add(new ViewItemModel() { message = client.Username + ":" + personalMessage.message });
+                    currentMessage = "";
+                }
+                else if (currentMessage.Length > 150)
+                {
+                    messages.Add(new ViewItemModel() { message = "Your message is too long! Max Lenght is 150 characters" });
+                }
+
             }
             else
             {

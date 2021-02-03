@@ -107,3 +107,11 @@ D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\bin\Debug\netco
 D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
 D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\TCPClientServer.dll
+C:\Users\User\Desktop\TCP-Chat\ChatServer\bin\Debug\netcoreapp3.1\TCPClientServer.pdb
+C:\Users\User\Desktop\TCP-Chat\ChatServer\obj\Debug\netcoreapp3.1\ChatServer.csproj.CopyComplete

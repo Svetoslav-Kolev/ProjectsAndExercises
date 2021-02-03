@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\obj\Debug\netcoreapp3.1\
+C:\Users\User\Desktop\TCP-Chat\ChatServer\obj\Debug\netcoreapp3.1\
 ChatServer
 none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
-D:\Visual Studio Projects\TCP-Chat3\TCP-Chat\TCP-Chat\ChatServer\App.xaml
+C:\Users\User\Desktop\TCP-Chat\ChatServer\App.xaml
 11151548125
 
 5-1411241960
-1941949444003
+1941810883211
 MainWindow.xaml;
 
-True
+False
 

@@ -155,11 +155,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Visual Studio Projects\\TCP-Chat3\\TCP-Chat\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
       "projectName": "TCPClientServer",
-      "projectPath": "D:\\Visual Studio Projects\\TCP-Chat3\\TCP-Chat\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\Visual Studio Projects\\TCP-Chat3\\TCP-Chat\\TCP-Chat\\TCPClientServer\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

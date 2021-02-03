@@ -6,12 +6,15 @@ namespace TCPClientServer
 {
      
     [Serializable]
-    class UsersPacket
+    class UsersPacket:Package
     {
        public List<string> Usernames;
+        public string sender { get;  set ; }
         public UsersPacket(List<string> usernames)
         {
             this.Usernames = usernames;
         }
+
+       
     }
 }

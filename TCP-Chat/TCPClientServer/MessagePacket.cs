@@ -5,7 +5,7 @@ using System.Text;
 namespace TCPClientServer
 {
     [Serializable]
-   public class MessagePacket
+   public class MessagePacket : Package
     {
         public string targetUsername { get; set; }
         public string message { get; set; }

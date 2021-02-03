@@ -15,6 +15,11 @@ using Microsoft.Win32;
 using System.IO;
 using TCP_Chat.Views;
 using System.Windows.Media.Imaging;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Media;
+using System.Drawing;
+using System.Windows.Interop;
+using TCP_Chat.ValueConverters;
 
 namespace TCP_Chat.ViewModels
 {
@@ -55,21 +60,6 @@ namespace TCP_Chat.ViewModels
             get { return _currentMessage; }
             set { _currentMessage = value; OnPropertyChanged("currentMessage"); }
         }
-
-        private string _targetUsername;
-        public string targetUsername
-        {
-            get
-            {
-                return _targetUsername;
-            }
-            set
-            {
-                _targetUsername = value;
-                OnPropertyChanged("targetUsername");
-            }
-        }
-
         private string _username = "";
 
         public string Username
@@ -77,8 +67,8 @@ namespace TCP_Chat.ViewModels
             get { return _username; }
             set { _username = value; OnPropertyChanged("Username"); }
         }
-        private ObservableCollection<object> _messages = new ObservableCollection<object>();
-        public ObservableCollection<object> messages
+        private ObservableCollection<ViewItemModel> _messages = new ObservableCollection<ViewItemModel>();
+        public ObservableCollection<ViewItemModel> messages
         {
             get { return _messages; }
             set { _messages = value; OnPropertyChanged("messages"); }
@@ -110,8 +100,8 @@ namespace TCP_Chat.ViewModels
                 if (_openPersonalWindow == null)
                 {
                     _openPersonalWindow = new RelayCommand(
-                        param => this.OpenWindow(targetUsername),
-                        param => this.CanOpenWindow(targetUsername));
+                        param => this.OpenWindow(param),
+                        param => this.CanOpenWindow(param));
                 }
                 return _openPersonalWindow;
             }
@@ -198,7 +188,7 @@ namespace TCP_Chat.ViewModels
         }
         private bool CanConnect()
         {
-            if (this.client.isConnected)
+            if (this.client.isConnected && SocketConnected(this.client.socket))
             {
                 return false;
             }
@@ -207,30 +197,46 @@ namespace TCP_Chat.ViewModels
                 return true;
             }
         }
-        private void Connect()
+        private async Task Connect()
         {
 
             //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); - only needed when connecting to your LAN network automatically
+            //Failed connections take a while to display the "Connection failed message"
             IPAddress ipAddress = null;
             IPAddress.TryParse(serverIp, out ipAddress);
             client.Username = Username;
+            bool connect = false;
             if (ipAddress != null && this.port != 0)
             {
                 try
                 {
-                    client.setEndPoint(ipAddress, this.port);
-
+                    connect = await Task.Run(()=> client.setEndPoint(ipAddress, this.port));
+                    
                     Task.Run(() => receiveMessagesAsync());
+
+                    if (connect == false)
+                    {
+                        messages.Add(new ViewItemModel() { message = "Connection failed" });
+                    }
                 }
                 catch (SocketException)
                 {
-                    messages.Add("Connection failed");
+                    messages.Add(new ViewItemModel() { message = "Connection failed" });
                 }
             }
             else
             {
-                messages.Add("Invalid Server credentials");
+                messages.Add(new ViewItemModel() { message = "Connection failed" });
             }
+        }
+        bool SocketConnected(Socket s)
+        {
+            bool part1 = s.Poll(1000, SelectMode.SelectRead);
+            bool part2 = (s.Available == 0);
+            if (part1 && part2)
+                return false;
+            else
+                return true;
         }
         private Dictionary<string, PersonalChatWindow> _personalWindows;
         public Dictionary<string, PersonalChatWindow> PersonalWindows
@@ -253,7 +259,14 @@ namespace TCP_Chat.ViewModels
 
                 if (message != null)
                 {
-                    if (message is List<string> users)
+                    if (message is string disconnectionReason)
+                    {
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            messages.Add(new ViewItemModel { message = disconnectionReason });
+                        });
+                    }
+                    else if (message is List<string> users)
                     {
                         App.Current.Dispatcher.Invoke((Action)delegate
                         {
@@ -264,8 +277,9 @@ namespace TCP_Chat.ViewModels
                                 {
                                     Button userButton = new Button();
                                     userButton.Content = user;
-                                    targetUsername = user;
+                                    userButton.CommandParameter = user;
                                     userButton.Command = OpenPersonalWindow;
+
                                     if (PersonalWindows.ContainsKey(user))
                                     {
                                         userButton.IsEnabled = false;
@@ -290,11 +304,7 @@ namespace TCP_Chat.ViewModels
                             {
                                 App.Current.Dispatcher.Invoke((Action)delegate
                                 {
-                                    PersonalChatWindow personalWindow = new PersonalChatWindow(this.client, Message.sender);
-                                    PersonalWindows.Add(Message.sender, personalWindow);
-                                    personalWindow.AddMessage(Message.sender + ": " + Message.message);
-                                    Application.Current.Properties["personalWindows"] = PersonalWindows;
-                                    personalWindow.Show();
+                                    CreatePersonalWindow(Message.sender, Message);
                                 });
                             }
                         }
@@ -302,15 +312,42 @@ namespace TCP_Chat.ViewModels
                         {
                             App.Current.Dispatcher.Invoke((Action)delegate
                             {
-                                messages.Add(Message.sender + ": " + Message.message);
+                                messages.Add(new ViewItemModel() { message = Message.sender + ": " + Message.message });
                             });
                         }
                     }
-                    else if (message is System.Drawing.Bitmap)
+                    else if (message is ImagePacket imgPacket)
                     {
+                        if (imgPacket.isPersonal == true && imgPacket.targetUsername == Username)
+                        {
+                            if (PersonalWindows.ContainsKey(imgPacket.sender))
+                            {
+                                App.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    BitmapToImageConverter converter = new BitmapToImageConverter();
+                                    var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
-                        messages.Add(message);
+                                    PersonalWindows[imgPacket.sender].AddImage((BitmapImage)receivedImage);
+                                });
+                            }
+                            else
+                            {
+                                App.Current.Dispatcher.Invoke((Action)delegate
+                                {
+                                    CreatePersonalWindow(imgPacket.sender, imgPacket);
+                                });
+                            }
+                        }
+                        else
+                        {
+                            App.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                BitmapToImageConverter converter = new BitmapToImageConverter();
+                                var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
+                                messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage, message = imgPacket.sender + " sent an Image!" });
+                            });
+                        }
                     }
                 }
                 else
@@ -324,29 +361,47 @@ namespace TCP_Chat.ViewModels
         {
             return true;
         }
-        private void SendFile()
+        private async Task SendFile()
         {
             if (this.client.isConnected)
             {
                 fileDialog = new OpenFileDialog();
                 fileDialog.ShowDialog();
+                fileDialog.DefaultExt = ".png";
+                fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
+
+
 
                 string filePath = fileDialog.FileName;
                 ImagePacket imagePacket = new ImagePacket();
-                imagePacket.Imagebmp = new System.Drawing.Bitmap(filePath);
+                imagePacket.Imagebmp = new Bitmap(filePath);
                 imagePacket.isPersonal = false;
                 imagePacket.sender = this.client.Username;
+
+                PrepPackage ImageBytes = new PrepPackage();
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(stream, imagePacket);
+                    ImageBytes.fileSizeInBytes = stream.Length;
+                }
+
+                this.client.TrySendObject(ImageBytes);
+                await Task.Delay(20);
                 this.client.TrySendObject(imagePacket);
             }
             else
             {
-                messages.Add("not connected");
+                App.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    messages.Add(new ViewItemModel() { message = "client you are trying to reach is not connected" });
+                });
             }
 
         }
-        private bool CanOpenWindow(string targetUser)
+        private bool CanOpenWindow(object targetUser)
         {
-            if (PersonalWindows.ContainsKey(targetUser))
+            if (PersonalWindows.ContainsKey(targetUser.ToString()))
             {
                 return false;
             }
@@ -355,12 +410,12 @@ namespace TCP_Chat.ViewModels
                 return true;
             }
         }
-        private void OpenWindow(string targetUser)
+        private void OpenWindow(object targetUser)
         {
             App.Current.Dispatcher.Invoke((Action)delegate
             {
-                PersonalChatWindow personalWindow = new PersonalChatWindow(this.client, targetUser);
-                PersonalWindows.Add(targetUser, personalWindow);
+                PersonalChatWindow personalWindow = new PersonalChatWindow(this.client, targetUser.ToString());
+                PersonalWindows.Add(targetUser.ToString(), personalWindow);
                 personalWindow.Show();
             });
         }
@@ -372,16 +427,45 @@ namespace TCP_Chat.ViewModels
         {
             if (this.client.isConnected)
             {
-                if (currentMessage != string.Empty || currentMessage != "")
+                if (currentMessage != string.Empty && currentMessage != "" && currentMessage.Length <= 150)
                 {
                     this.client.sendMessage(currentMessage);
+                    currentMessage = "";
                 }
-                currentMessage = "";
+                else if (currentMessage.Length > 200)
+                {
+                    messages.Add(new ViewItemModel() { message = "Your message is too long! Max Length is 150 characters." });
+                }
+
             }
             else
             {
                 currentMessage = "Not connected";
             }
+        }
+        public void CreatePersonalWindow(string target, object Packet)
+        {
+            App.Current.Dispatcher.Invoke((Action)delegate
+            {
+                PersonalChatWindow personalWindow = new PersonalChatWindow(this.client, target);
+                PersonalWindows.Add(target, personalWindow);
+                if (Packet is ImagePacket imgPacket)
+                {
+                    BitmapToImageConverter converter = new BitmapToImageConverter();
+                    var receivedImage = converter.Convert(imgPacket.Imagebmp);
+
+                    personalWindow.AddImage((BitmapImage)receivedImage);
+                    Application.Current.Properties["personalWindows"] = PersonalWindows;
+                    personalWindow.Show();
+                }
+                else if (Packet is MessagePacket Message)
+                {
+                    personalWindow.AddMessage(Message.message);
+                    Application.Current.Properties["personalWindows"] = PersonalWindows;
+                    personalWindow.Show();
+                }
+
+            });
         }
 
         public void WindowClosing(object sender, CancelEventArgs e)

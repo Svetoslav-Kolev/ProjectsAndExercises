@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChatServer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="200" Width="400">
+        Title="MainWindow" Height="200" Width="300">
     <Window.Resources>
         <Style TargetType="TextBox">
             <Setter Property="Height" Value="25"/>
@@ -19,8 +19,7 @@
         </Style>
     </Window.Resources>
     <StackPanel>
-        <Label Content="Run Server on port :" Margin="10 10 10 0" HorizontalAlignment="Center"/>
-        <TextBox Width="100" />
+        <Label Content="Server" Margin="10 10 10 0" HorizontalAlignment="Center"/>
         <Button x:Name="Start" Content="Run" Width="100" Click="StartServer"/>
         <Button x:Name="Stop" Content="Stop" Width="100" Click="StopServer"  IsEnabled="False"/>
     </StackPanel>

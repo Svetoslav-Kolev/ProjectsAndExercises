@@ -32,7 +32,6 @@ namespace TCP_Chat.Commands
             : this(execute, null)
         {
         }
-
         /// <summary>
         /// Creates a new command.
         /// </summary>
