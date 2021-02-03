@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\User\Desktop\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\
+D:\repos\exercises\ProjectsAndExercises\TCP-Chat\TCP-Chat\obj\Debug\netcoreapp3.1\
 TCP_Chat
 none
 false
 TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1
-C:\Users\User\Desktop\TCP-Chat\TCP-Chat\App.xaml
+D:\repos\exercises\ProjectsAndExercises\TCP-Chat\TCP-Chat\App.xaml
 2-1950248690
 
 11-1611164736
-1961824330841
+1961600815186
 Views\MainWindow.xaml;Views\PersonalChatWindow.xaml;
 
 False
