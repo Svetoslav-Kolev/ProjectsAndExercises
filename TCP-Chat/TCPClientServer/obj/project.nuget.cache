@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "KaoAnf3weFfJBBxRwRU7bDAL4WsoUul6YMtyC0YG3nVwyYSXgQJzxhk87h9zSxwEF3Nwmkah8CgNzxnesdGIkw==",
+  "dgSpecHash": "veaeDOWbxsyClfgS5k9uJ4/o95uggchflRyTSkKM3MAepufz4BthomkXIfkgCuI6Kq3+DpNW7abd+sTNcmEAXw==",
   "success": true,
-  "projectFilePath": "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+  "projectFilePath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",

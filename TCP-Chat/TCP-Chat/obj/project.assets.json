@@ -200,11 +200,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
       "projectName": "TCP-Chat",
-      "projectPath": "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -222,9 +222,10 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
-              "projectPath": "D:\\repos\\exercises\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj"
+            "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
+              "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj"
             }
           }
         }
@@ -237,6 +238,7 @@
     },
     "frameworks": {
       "netcoreapp3.1": {
+        "targetAlias": "netcoreapp3.1",
         "dependencies": {
           "System.Windows.Interactivity.WPF": {
             "target": "Package",
@@ -261,7 +263,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.402\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   },

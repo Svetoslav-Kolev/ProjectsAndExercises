@@ -45,42 +45,14 @@ public class Server
     }
     public void OpenServer()
     {
-        // this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-        if (this.socket.IsBound == true)
-        {
-            try
-            {
-                this.socket.Listen(10);
-            }
-            catch (Exception)
-            {
+        this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-                this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-                this.socket.Bind(endPoint);
-                this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-                this.socket.Listen(10);
-                Task.Run(() => acceptConnections());
+        this.socket.Bind(endPoint);
+        this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+        this.socket.Listen(10);
+        Task.Run(() => acceptConnections());
 
-            }
-            this.IsRunning = true;
-        }
-        else
-        {
-            this.IsRunning = true;
-
-            this.socket.Bind(endPoint);
-            this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            this.socket.Listen(10);
-
-
-            //CancellationToken token = source.Token;
-
-            Task.Run(() => acceptConnections());
-        }
-
-
-
-
+        this.IsRunning = true;
     }
     public void StopServer()
     {
@@ -103,6 +75,7 @@ public class Server
             connectedClients.Clear();
             connections.Clear();
             this.socket.Close();
+            //this.socket = null;
         }
     }
     public void acceptConnections()
@@ -148,7 +121,7 @@ public class Server
                 connections.Add(newClient);
 
 
-                newClient.sendMessage("You have been Connected!");
+                await newClient.sendMessage("You have been Connected!");
 
                 Task.Run(() => receiveMessagesTask(newClient.socket));
                 Task.Run(() => UpdateUsersTask(newClient.socket));
@@ -175,6 +148,7 @@ public class Server
             if (clientSocket.Available != 0)
             {
                 var receivedPackage = tryReadObject(clientSocket);
+
                 if (receivedPackage is MessagePacket package)
                 {
                     if (package.isPersonal == true)
@@ -203,31 +177,25 @@ public class Server
 
                     RemoveConnection(clientSocket);
                 }
-                else if (receivedPackage is PrepPackage prepPackage)
+                else if (receivedPackage is ImagePacket ImagePacket)
                 {
-                    var receivedImage = tryReadBigObject(clientSocket, prepPackage.fileSizeInBytes);
-                    if (receivedImage is ImagePacket imgPacket)
+
+                    if (ImagePacket.isPersonal == true)
                     {
-                        if (imgPacket.isPersonal == true)
+                        Client targetClient = connections.Where(c => c.Username == ImagePacket.targetUsername).FirstOrDefault();
+                        if (targetClient != null)
                         {
-                            Client targetClient = connections.Where(c => c.Username == imgPacket.targetUsername).FirstOrDefault();
-                            if (targetClient != null)
-                            {
-                                await TrySendObject(prepPackage, targetClient.socket);
-
-                                await TrySendObject(receivedImage, targetClient.socket);
-                            }
-                        }
-                        else
-                        {
-                            foreach (var client in connections)
-                            {
-                                await TrySendObject(prepPackage, client.socket);
-
-                                await TrySendObject(receivedImage, client.socket);
-                            }
+                            await TrySendObject(ImagePacket, targetClient.socket);
                         }
                     }
+                    else
+                    {
+                        foreach (var client in connections)
+                        {
+                            await TrySendObject(ImagePacket, client.socket);
+                        }
+                    }
+
 
                 }
 
@@ -244,55 +212,29 @@ public class Server
             List<string> usernames = connectedClients.Keys.OrderBy(username => username).ToList();
             UsersPacket usersPacket = new UsersPacket(usernames);
             await TrySendObject(usersPacket, clientSocket);
-            await Task.Delay(3000);
-        }
-
-    }
-    private static object tryReadBigObject(Socket clientSocket, long fileSize)
-    {
-        byte[] data = new byte[fileSize];
-        try
-        {
-            using (NetworkStream stream = new NetworkStream(clientSocket))
-            {
-                int totalRead = 0;
-                int offset = 0;
-                while (true)
-                {
-                    offset = totalRead;
-                    totalRead += stream.Read(data, offset, (int)fileSize - totalRead);
-                    if (totalRead >= fileSize)
-                    {
-                        break;
-                    }
-
-                }
-
-                MemoryStream memory = new MemoryStream(data, 0, (int)fileSize);
-                memory.Position = 0;
-
-                BinaryFormatter formatter = new BinaryFormatter();
-                var obj = formatter.Deserialize(memory);
-
-                return obj;
-            }
-        }
-        catch (Exception e)
-        {
-
-            throw e;
+            await Task.Delay(5000);
         }
 
     }
     private static object tryReadObject(Socket clientSocket)
     {
-        byte[] data = new byte[clientSocket.ReceiveBufferSize];
+        byte[] lengthBuffer = new byte[4];
         try
         {
             using (NetworkStream stream = new NetworkStream(clientSocket))
             {
-                stream.Read(data, 0, data.Length);
-                MemoryStream memory = new MemoryStream(data, 0, data.Length);
+
+                stream.Read(lengthBuffer, 0, lengthBuffer.Length);
+                int length = BitConverter.ToInt32(lengthBuffer, 0);
+                byte[] data = new byte[length];
+
+                int bytesRead = 0;
+                while (bytesRead < length)
+                {
+                    bytesRead += stream.Read(data, bytesRead, data.Length-bytesRead);
+                }
+
+                MemoryStream memory =  new MemoryStream(data, 0, data.Length);
                 memory.Position = 0;
 
                 BinaryFormatter formatter = new BinaryFormatter();
@@ -317,11 +259,18 @@ public class Server
                 var memory = new MemoryStream();
                 var formatter = new BinaryFormatter();
                 formatter.Serialize(memory, obj);
+
+                byte[] lengthPrefix = BitConverter.GetBytes(Convert.ToInt32(memory.Length));
+
                 var newObj = memory.ToArray();
+                byte[] ret = new byte[newObj.Length + lengthPrefix.Length];
+
+                lengthPrefix.CopyTo(ret, 0);
+                newObj.CopyTo(ret, lengthPrefix.Length);
 
                 memory.Position = 0;
-                stream.Write(newObj, 0, newObj.Length);
-                await Task.Delay(3);
+                stream.Write(ret, 0, ret.Length);
+                //stream.Flush();
             }
 
         }

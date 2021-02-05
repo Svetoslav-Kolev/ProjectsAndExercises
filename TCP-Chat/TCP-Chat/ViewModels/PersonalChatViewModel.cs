@@ -102,17 +102,6 @@ namespace TCP_Chat.ViewModels
                 imagePacket.sender = this.client.Username;
                 imagePacket.targetUsername = targetUsername;
 
-
-                PrepPackage ImageBytes = new PrepPackage();
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, imagePacket);
-                    ImageBytes.fileSizeInBytes = stream.Length;
-                }
-
-                this.client.TrySendObject(ImageBytes);
-                await Task.Delay(20);
                 this.client.TrySendObject(imagePacket);
 
                 BitmapToImageConverter bmpConverter = new BitmapToImageConverter();

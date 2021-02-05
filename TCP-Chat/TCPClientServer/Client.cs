@@ -27,12 +27,12 @@ namespace TCPClientServer
             this.ip = Dns.GetHostEntry(Dns.GetHostName()).AddressList[1]; // only needed if you wish to send your ip as well
 
             this.isConnected = false;
-            
+
             this.id = Guid.NewGuid();
 
 
         }
-        public async  Task<bool> setEndPoint(IPAddress ip, int port)
+        public async Task<bool> setEndPoint(IPAddress ip, int port)
         {
             this.endPoint = new IPEndPoint(ip, port);
             try
@@ -43,7 +43,7 @@ namespace TCPClientServer
                 if (SocketConnected(this.socket))
                 {
                     this.isConnected = true;
-                    TrySendObject(new ConnectionPackage(this.id, this.Username));
+                    await TrySendObject(new ConnectionPackage(this.id, this.Username));
                     return true;
                 }
                 else
@@ -53,7 +53,7 @@ namespace TCPClientServer
                     this.socket.Close();
                     return false;
                 }
-                
+
             }
             catch (SocketException e)
             {
@@ -71,7 +71,7 @@ namespace TCPClientServer
             else
                 return true;
         }
-        public void TrySendObject(object obj)
+        public async Task TrySendObject(object obj)
         {
             try
             {
@@ -80,24 +80,32 @@ namespace TCPClientServer
                     var memory = new MemoryStream();
                     var formatter = new BinaryFormatter();
                     formatter.Serialize(memory, obj);
+                    
+                    byte[] lengthPrefix = BitConverter.GetBytes(Convert.ToInt32(memory.Length));
+
                     var newObj = memory.ToArray();
+                    byte[] ret = new byte[newObj.Length + lengthPrefix.Length];
+                    lengthPrefix.CopyTo(ret, 0);
+                    newObj.CopyTo(ret, lengthPrefix.Length);
 
                     memory.Position = 0;
-                    stream.Write(newObj, 0, newObj.Length);
+                    
+                    stream.Write(ret, 0, ret.Length);
+                    //stream.Flush();
                 }
             }
             catch (IOException)
             {
-                return;
+                throw;
             }
         }
-        public void sendMessage(string message)
+        public async Task sendMessage(string message)
         {
             try
             {
                 MessagePacket newMessage = new MessagePacket(message);
                 newMessage.sender = this.Username;
-                TrySendObject(newMessage);
+                await TrySendObject(newMessage);
             }
             catch (IOException)
             {
@@ -121,52 +129,20 @@ namespace TCPClientServer
                 {
                     try
                     {
-                        byte[] data = new byte[this.socket.ReceiveBufferSize];
-                        using (NetworkStream stream = new NetworkStream(socket))
+                        receivedObject = await tryReadObject();
+
+                        receivedObject = InterpretPackage(receivedObject);
+                        if (receivedObject is DisconnectionPackage package)
                         {
-
-                            stream.Read(data, 0, data.Length);
-                            MemoryStream memory = new MemoryStream(data, 0, data.Length);
-                            memory.Position = 0;
-
-                            BinaryFormatter formatter = new BinaryFormatter();
-                            try
-                            {
-                                receivedObject = formatter.Deserialize(memory);
-                            }
-                            catch (Exception)
-                            {
-                                receivedObject = null;
-                            }
-
-                            if (receivedObject is DisconnectionPackage package)
-                            {                              
-                                this.socket.Shutdown(SocketShutdown.Both);
-                                this.socket.Close();
-                                this.isConnected = false;
-                                return package.reason;
-                            }
-                            else if (receivedObject is MessagePacket messagePacket)
-                            {
-                                return messagePacket;
-                            }
-                            else if (receivedObject is UsersPacket usersPacket)
-                            {
-                                return usersPacket.Usernames;
-                            }
-                            else if (receivedObject is PrepPackage prepPackage)
-                            {
-                                var receivedImage = tryReadBigObject(this.socket, prepPackage.fileSizeInBytes);
-                                if (receivedImage is ImagePacket imgPacket)
-                                {
-                                    return imgPacket;
-                                }
-                            }
-                            else
-                            {
-                                receivedObject = null;
-                            }
-
+                            return package.reason;
+                        }
+                        else if (receivedObject is UsersPacket usersPacket)
+                        {
+                            return usersPacket.Usernames;
+                        }
+                        else if (receivedObject != null)
+                        {
+                            return receivedObject;
                         }
                     }
                     catch (Exception e)
@@ -179,50 +155,73 @@ namespace TCPClientServer
             }
             return receivedObject;
         }
-        private static object tryReadBigObject(Socket clientSocket, long fileSize)
+        private async Task<object> tryReadObject()
         {
-            byte[] data = new byte[fileSize];
+            byte[] lengthBuffer = new byte[4];
+            //byte[] data = new byte[clientSocket.ReceiveBufferSize];
             try
             {
-                using (NetworkStream stream = new NetworkStream(clientSocket))
+                using (NetworkStream stream = new NetworkStream(this.socket))
                 {
-                    int totalRead = 0;
-                    int offset = 0;
-                    while (true)
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    stream.Read(lengthBuffer, 0, lengthBuffer.Length);
+                    int length = BitConverter.ToInt32(lengthBuffer, 0);
+                    byte[] data = new byte[length];
+                    int bytesRead = 0;
+                    while (bytesRead < length)
                     {
-                        offset = totalRead;
-                        totalRead += stream.Read(data, offset, (int)fileSize - totalRead);
-                        if (totalRead >= fileSize)
-                        {
-                            break;
-                        }
-
+                        bytesRead += stream.Read(data, bytesRead, data.Length-bytesRead);
                     }
 
-                    MemoryStream memory = new MemoryStream(data, 0, (int)fileSize);
+                    MemoryStream memory = new MemoryStream(data, 0, data.Length);
                     memory.Position = 0;
 
-                    BinaryFormatter formatter = new BinaryFormatter();
                     var obj = formatter.Deserialize(memory);
 
                     return obj;
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
 
-                throw e;
+                return null;
             }
-
         }
-        public void TryDisconnect()
+        private Package InterpretPackage(object receivedObject)
+        {
+            if (receivedObject is DisconnectionPackage package)
+            {
+                this.socket.Shutdown(SocketShutdown.Both);
+                this.socket.Close();
+                this.isConnected = false;
+                return package;
+            }
+            else if (receivedObject is MessagePacket messagePacket)
+            {
+                return messagePacket;
+            }
+            else if (receivedObject is UsersPacket usersPacket)
+            {
+                return usersPacket;
+            }
+            else if (receivedObject is ImagePacket imgPacket)
+            {
+
+                return imgPacket;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public async Task TryDisconnect()
         {
             if (this.isConnected)
             {
                 try
                 {
                     DisconnectionPackage dcPackage = new DisconnectionPackage(Username, "Request disconnection");
-                    TrySendObject(dcPackage);
+                    await TrySendObject(dcPackage);
                     this.socket.Shutdown(SocketShutdown.Both);
                     this.socket.Close();
                     this.isConnected = false;

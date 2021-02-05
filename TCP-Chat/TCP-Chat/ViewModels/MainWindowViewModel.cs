@@ -27,7 +27,7 @@ namespace TCP_Chat.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public Client client { get; set; }
-
+        public bool attemptingConnection;
         private string _serverIp;
         public string serverIp
         {
@@ -182,13 +182,13 @@ namespace TCP_Chat.ViewModels
                 return false;
             }
         }
-        private void Disconnect()
+        private async Task Disconnect()
         {
-            this.client.TryDisconnect();
+            await this.client.TryDisconnect();
         }
         private bool CanConnect()
         {
-            if (this.client.isConnected && SocketConnected(this.client.socket))
+            if (this.client.isConnected && SocketConnected(this.client.socket) || this.attemptingConnection == true)
             {
                 return false;
             }
@@ -206,26 +206,29 @@ namespace TCP_Chat.ViewModels
             IPAddress.TryParse(serverIp, out ipAddress);
             client.Username = Username;
             bool connect = false;
+            attemptingConnection = true;
             if (ipAddress != null && this.port != 0)
             {
                 try
                 {
-                    connect = await Task.Run(()=> client.setEndPoint(ipAddress, this.port));
-                    
-                    Task.Run(() => receiveMessagesAsync());
-
+                    messages.Add(new ViewItemModel() { message = "Attempting to connect..." });
+                    connect = await Task.Run(() => client.setEndPoint(ipAddress, this.port));
                     if (connect == false)
                     {
                         messages.Add(new ViewItemModel() { message = "Connection failed" });
                     }
+                    attemptingConnection = false;
+                    Task.Run(() => receiveMessagesAsync());
                 }
                 catch (SocketException)
                 {
+                    attemptingConnection = false;
                     messages.Add(new ViewItemModel() { message = "Connection failed" });
                 }
             }
             else
             {
+                attemptingConnection = false;
                 messages.Add(new ViewItemModel() { message = "Connection failed" });
             }
         }
@@ -256,110 +259,119 @@ namespace TCP_Chat.ViewModels
             {
                 PersonalWindows = (Dictionary<string, PersonalChatWindow>)Application.Current.Properties["personalWindows"];
                 object message = await client.receiveMessageAsync();
-
-                if (message != null)
+                UpdateUI(message);
+            }
+        }
+        private void UpdateUI(object message)
+        {
+            if (message != null)
+            {
+                if (message is string disconnectionReason)
                 {
-                    if (message is string disconnectionReason)
+                    App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        App.Current.Dispatcher.Invoke((Action)delegate
-                        {
-                            messages.Add(new ViewItemModel { message = disconnectionReason });
-                        });
-                    }
-                    else if (message is List<string> users)
+                        messages.Add(new ViewItemModel { message = disconnectionReason });
+                    });
+                }
+                else if (message is List<string> users)
+                {
+                    App.Current.Dispatcher.Invoke((Action)delegate
                     {
-                        App.Current.Dispatcher.Invoke((Action)delegate
+                        CurrentUsers.Clear();
+                        foreach (string user in users)
                         {
-                            CurrentUsers.Clear();
-                            foreach (string user in users)
+                            if (user != Username)
                             {
-                                if (user != Username)
-                                {
-                                    Button userButton = new Button();
-                                    userButton.Content = user;
-                                    userButton.CommandParameter = user;
-                                    userButton.Command = OpenPersonalWindow;
+                                Button userButton = new Button();
+                                userButton.Content = user;
+                                userButton.CommandParameter = user;
+                                userButton.Command = OpenPersonalWindow;
 
-                                    if (PersonalWindows.ContainsKey(user))
-                                    {
-                                        userButton.IsEnabled = false;
-                                    }
-                                    CurrentUsers.Add(userButton);
+                                if (PersonalWindows.ContainsKey(user))
+                                {
+                                    userButton.IsEnabled = false;
                                 }
+                                CurrentUsers.Add(userButton);
                             }
-                        });
-                    }
-                    else if (message is MessagePacket Message)
+                        }
+                    });
+                }
+                else if (message is MessagePacket Message)
+                {
+                    if (Message.targetUsername == Username && Message.isPersonal == true)
                     {
-                        if (Message.targetUsername == Username && Message.isPersonal == true)
+                        if (PersonalWindows.ContainsKey(Message.sender))
                         {
-                            if (PersonalWindows.ContainsKey(Message.sender))
+                            App.Current.Dispatcher.Invoke((Action)delegate
                             {
-                                App.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    PersonalWindows[Message.sender].AddMessage(Message.message);
-                                });
-                            }
-                            else
-                            {
-                                App.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    CreatePersonalWindow(Message.sender, Message);
-                                });
-                            }
+                                PersonalWindows[Message.sender].AddMessage(Message.message);
+                            });
                         }
                         else
                         {
                             App.Current.Dispatcher.Invoke((Action)delegate
                             {
-                                messages.Add(new ViewItemModel() { message = Message.sender + ": " + Message.message });
+                                CreatePersonalWindow(Message.sender, Message);
                             });
                         }
                     }
-                    else if (message is ImagePacket imgPacket)
+                    else
                     {
-                        if (imgPacket.isPersonal == true && imgPacket.targetUsername == Username)
+                        App.Current.Dispatcher.Invoke((Action)delegate
                         {
-                            if (PersonalWindows.ContainsKey(imgPacket.sender))
-                            {
-                                App.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    BitmapToImageConverter converter = new BitmapToImageConverter();
-                                    var receivedImage = converter.Convert(imgPacket.Imagebmp);
-
-                                    PersonalWindows[imgPacket.sender].AddImage((BitmapImage)receivedImage);
-                                });
-                            }
-                            else
-                            {
-                                App.Current.Dispatcher.Invoke((Action)delegate
-                                {
-                                    CreatePersonalWindow(imgPacket.sender, imgPacket);
-                                });
-                            }
-                        }
-                        else
+                            messages.Add(new ViewItemModel() { message = Message.sender + ": " + Message.message });
+                        });
+                    }
+                }
+                else if (message is ImagePacket imgPacket)
+                {
+                    if (imgPacket.isPersonal == true && imgPacket.targetUsername == Username)
+                    {
+                        if (PersonalWindows.ContainsKey(imgPacket.sender))
                         {
                             App.Current.Dispatcher.Invoke((Action)delegate
                             {
                                 BitmapToImageConverter converter = new BitmapToImageConverter();
                                 var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
-                                messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage, message = imgPacket.sender + " sent an Image!" });
+                                PersonalWindows[imgPacket.sender].AddImage((BitmapImage)receivedImage);
+                            });
+                        }
+                        else
+                        {
+                            App.Current.Dispatcher.Invoke((Action)delegate
+                            {
+                                CreatePersonalWindow(imgPacket.sender, imgPacket);
                             });
                         }
                     }
-                }
-                else
-                {
-                    return;
-                }
+                    else
+                    {
+                        App.Current.Dispatcher.Invoke((Action)delegate
+                        {
+                            BitmapToImageConverter converter = new BitmapToImageConverter();
+                            var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
+                            messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage, message = imgPacket.sender + " sent an Image!" });
+                        });
+                    }
+                }
+            }
+            else
+            {
+                return;
             }
         }
         private bool CanSendFile()
         {
-            return true;
+            if (this.client.isConnected)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
         private async Task SendFile()
         {
@@ -370,25 +382,13 @@ namespace TCP_Chat.ViewModels
                 fileDialog.DefaultExt = ".png";
                 fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
 
-
-
                 string filePath = fileDialog.FileName;
                 ImagePacket imagePacket = new ImagePacket();
                 imagePacket.Imagebmp = new Bitmap(filePath);
                 imagePacket.isPersonal = false;
                 imagePacket.sender = this.client.Username;
 
-                PrepPackage ImageBytes = new PrepPackage();
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(stream, imagePacket);
-                    ImageBytes.fileSizeInBytes = stream.Length;
-                }
-
-                this.client.TrySendObject(ImageBytes);
-                await Task.Delay(20);
-                this.client.TrySendObject(imagePacket);
+                await this.client.TrySendObject(imagePacket);
             }
             else
             {
@@ -421,15 +421,23 @@ namespace TCP_Chat.ViewModels
         }
         private bool CanSend()
         {
-            return true;
+            if (this.client.isConnected)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
-        private void Send()
+        private async Task Send()
         {
             if (this.client.isConnected)
             {
                 if (currentMessage != string.Empty && currentMessage != "" && currentMessage.Length <= 150)
                 {
-                    this.client.sendMessage(currentMessage);
+                    await this.client.sendMessage(currentMessage);
                     currentMessage = "";
                 }
                 else if (currentMessage.Length > 200)
@@ -468,9 +476,9 @@ namespace TCP_Chat.ViewModels
             });
         }
 
-        public void WindowClosing(object sender, CancelEventArgs e)
+        public async void WindowClosing(object sender, CancelEventArgs e)
         {
-            this.Disconnect();
+            await this.Disconnect();
             e.Cancel = false;
         }
     }
