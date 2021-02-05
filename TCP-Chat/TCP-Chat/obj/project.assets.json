@@ -200,11 +200,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
+      "projectUniqueName": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
       "projectName": "TCP-Chat",
-      "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
+      "projectPath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\TCP-Chat.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCP-Chat\\obj\\",
+      "outputPath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCP-Chat\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
@@ -224,8 +224,8 @@
         "netcoreapp3.1": {
           "targetAlias": "netcoreapp3.1",
           "projectReferences": {
-            "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
-              "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj"
+            "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
+              "projectPath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj"
             }
           }
         }

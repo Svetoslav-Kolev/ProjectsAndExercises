@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {}
+    "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
+    "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+        "projectUniqueName": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
         "projectName": "TCPClientServer",
-        "projectPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
+        "projectPath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\TCPClientServer.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\TCP-Chat\\TCPClientServer\\obj\\",
+        "outputPath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat\\TCPClientServer\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

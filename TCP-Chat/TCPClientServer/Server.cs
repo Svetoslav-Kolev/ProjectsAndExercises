@@ -27,7 +27,6 @@ public class Server
 
     public static ManualResetEvent allDone = new ManualResetEvent(false); //signals thread to stop or continue
 
-    CancellationTokenSource source;
 
     public Server(IPAddress address, int port)
     {
@@ -45,14 +44,24 @@ public class Server
     }
     public void OpenServer()
     {
-        this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+        try
+        {
+            this.socket = new Socket(address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-        this.socket.Bind(endPoint);
-        this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-        this.socket.Listen(10);
-        Task.Run(() => acceptConnections());
+            this.socket.Bind(endPoint);
+            this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+            this.socket.Listen(10);
+            Task.Run(() => acceptConnections());
 
-        this.IsRunning = true;
+            this.IsRunning = true;
+        }
+        catch (Exception)
+        {
+            this.IsRunning = false;
+
+            throw;
+        }
+       
     }
     public void StopServer()
     {
