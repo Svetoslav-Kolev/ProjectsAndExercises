@@ -33,3 +33,12 @@ C:\Users\User\Desktop\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClient
 C:\Users\User\Desktop\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.dll
 C:\Users\User\Desktop\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.pdb
 C:\Users\User\Desktop\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.csprojAssemblyReference.cache
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\bin\Debug\netcoreapp3.1\TCPClientServer.deps.json
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\bin\Debug\netcoreapp3.1\TCPClientServer.dll
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\bin\Debug\netcoreapp3.1\TCPClientServer.pdb
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.csprojAssemblyReference.cache
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.AssemblyInfoInputs.cache
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.AssemblyInfo.cs
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.csproj.CoreCompileInputs.cache
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.dll
+D:\repos\ProjectsAndExercises\TCP-Chat\TCPClientServer\obj\Debug\netcoreapp3.1\TCPClientServer.pdb

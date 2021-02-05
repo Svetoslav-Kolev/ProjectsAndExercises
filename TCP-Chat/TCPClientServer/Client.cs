@@ -164,7 +164,12 @@ namespace TCPClientServer
                 using (NetworkStream stream = new NetworkStream(this.socket))
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
-                    stream.Read(lengthBuffer, 0, lengthBuffer.Length);
+                    int lengthOffset = 0;
+                    while (lengthOffset<4)
+                    {
+                        lengthOffset +=stream.Read(lengthBuffer, lengthOffset, lengthBuffer.Length-lengthOffset);
+                    }
+                  
                     int length = BitConverter.ToInt32(lengthBuffer, 0);
                     byte[] data = new byte[length];
                     int bytesRead = 0;
