@@ -440,7 +440,7 @@ namespace TCP_Chat.ViewModels
                     await this.client.sendMessage(currentMessage);
                     currentMessage = "";
                 }
-                else if (currentMessage.Length > 200)
+                else if (currentMessage.Length > 150)
                 {
                     messages.Add(new ViewItemModel() { message = "Your message is too long! Max Length is 150 characters." });
                 }

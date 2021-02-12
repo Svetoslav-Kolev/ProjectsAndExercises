@@ -1,0 +1,74 @@
+﻿<Window x:Class="TCP_Chat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TCP_Chat"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="1200">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Height" Value="25"/>
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="FontSize" Value="25"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="350"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="315"/>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="315"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="1" Grid.RowSpan="3">
+            <Label Content="Enter Server credentials :"  HorizontalAlignment="Center" FontSize="20"/>
+            <Label Content="Your Username" HorizontalAlignment="Center" FontSize="20"/>
+            <TextBox Margin="0 10 0 0"  Height="30" Width="200"  Name="UsernameTextBox" Text="{Binding Username,Mode=OneWayToSource}"/>
+            <Label Content="Ip Address" HorizontalAlignment="Center" FontSize="20"/>
+            <TextBox Margin="0 10 0 0" Height="30" Width="200"  Name="IpTextBox" Text="{Binding serverIp,Mode=OneWayToSource}"/>
+            <Label Content="port" HorizontalAlignment="Center" FontSize="20"/>
+            <TextBox Margin="0 10 0 0"  Height="30" Width="200"  Name="PortTextBox" Text="{Binding port,Mode=OneWayToSource}"/>
+
+            <Button Margin="0 30 0 0" Width="150" Height="50" Command="{Binding Path=connectCommand}">Connect</Button>
+            <Button Margin="0 10 0 0" Width="150" Height="50" Command="{Binding Path=disconnectCommand}">Disconnect</Button>
+            <Line X1="0" X2="410" Margin="0 20 0 0" Stroke="Black" StrokeThickness="4"/>
+        </StackPanel >
+        <StackPanel Grid.Column="2" Grid.Row="0" Grid.ColumnSpan="2" Grid.RowSpan="3">
+
+            <ListView BorderBrush="Gray"  BorderThickness="3" Margin="0 20 0 0"  Height="460" ScrollViewer.CanContentScroll="False" Grid.RowSpan="3" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Width="400"  Name="ChatTextBlock"  FontSize="20" ItemsSource="{Binding messages, UpdateSourceTrigger=PropertyChanged}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Name="messageBlock" Text="{Binding message}" TextWrapping="Wrap" MaxWidth="350" Width="Auto" Height="Auto"/>
+                            <Image Source="{Binding bmpImage}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+            <TextBox Height="70" Width="400" TextWrapping="Wrap" MaxWidth="400" BorderBrush="Black" BorderThickness="2"   x:Name="SendMessageBox" Text="{Binding currentMessage,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
+
+            <Button  HorizontalAlignment="Center" VerticalAlignment="Top"  Content="Send"  Command="{Binding sendCommand}"  Width="400" Height="50" FontSize="30"/>
+            <Button Name="btnOpenFile"  HorizontalAlignment="Center" VerticalAlignment="Top"  Width="400"  Command="{Binding sendFileCommand}">Send Image</Button>
+        </StackPanel>
+        <StackPanel Grid.ColumnSpan="2" Grid.RowSpan="3" Grid.Column="3">
+            <Label Content="Users Online:" HorizontalAlignment="Center" Margin="0 10 0 0" FontSize="25"/>
+            <ListView BorderBrush="Gray" Margin="10 20 0 0"  BorderThickness="3"  Height="560"  Grid.RowSpan="3" Width="330"  Name="UsersView" FontSize="20" ItemsSource="{Binding CurrentUsers, UpdateSourceTrigger=PropertyChanged}">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
+        </StackPanel>
+    </Grid>
+</Window>

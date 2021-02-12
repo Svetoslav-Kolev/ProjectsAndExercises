@@ -230,13 +230,14 @@ public class Server
         byte[] lengthBuffer = new byte[4];
         try
         {
+            
             using (NetworkStream stream = new NetworkStream(clientSocket))
             {
 
                 int lengthOffset = 0;
                 while (lengthOffset < 4)
                 {
-                    lengthOffset +=stream.Read(lengthBuffer, lengthOffset, lengthBuffer.Length - lengthOffset);
+                    lengthOffset += stream.Read(lengthBuffer, lengthOffset, lengthBuffer.Length - lengthOffset);
                 }
                 int length = BitConverter.ToInt32(lengthBuffer, 0);
                 byte[] data = new byte[length];
@@ -244,10 +245,10 @@ public class Server
                 int bytesRead = 0;
                 while (bytesRead < length)
                 {
-                    bytesRead += stream.Read(data, bytesRead, data.Length-bytesRead);
+                    bytesRead += stream.Read(data, bytesRead, data.Length - bytesRead);
                 }
 
-                MemoryStream memory =  new MemoryStream(data, 0, data.Length);
+                MemoryStream memory = new MemoryStream(data, 0, data.Length);
                 memory.Position = 0;
 
                 BinaryFormatter formatter = new BinaryFormatter();
