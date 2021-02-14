@@ -385,7 +385,7 @@ namespace TCP_Chat.ViewModels
                         }
                         catch (Exception)
                         {
-                            await HandleDisconnection();
+                            await HandleDisconnection(imagePacket);
                         }
 
                     }
@@ -423,7 +423,7 @@ namespace TCP_Chat.ViewModels
             {
                 messages.Add(new ViewItemModel() { message = "You have been disconnected. Trying to reconnect..." });
                 await Connect();
-                if (SocketConnected(this.client.socket))
+                if (SocketConnected(this.client.socket)&&package!=null)
                 {
                     await this.client.TrySendObject(package);
                 }  
@@ -470,14 +470,14 @@ namespace TCP_Chat.ViewModels
                 {
                     try
                     {
-                        await this.client.sendMessage(currentMessage);
-                        currentMessage = "";
+                        await this.client.sendMessage(currentMessage);     
                     }
                     catch (Exception)
                     {
-                        await HandleDisconnection();
+                        MessagePacket message = new MessagePacket(currentMessage);
+                        await HandleDisconnection(message);
                     }
-
+                    currentMessage = "";
                 }
                 else if (currentMessage.Length > 150)
                 {
