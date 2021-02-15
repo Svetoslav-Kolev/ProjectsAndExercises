@@ -24,7 +24,7 @@ public class Server
 
     public Socket socket { get; private set; }
     public Dictionary<string, Guid> connectedClients { get; private set; }
-    private List<Client> connections { get;  set; }
+    private List<Client> connections { get; set; }
 
     private ManualResetEvent allDone = new ManualResetEvent(false); //signals thread to stop or continue
 
@@ -117,7 +117,7 @@ public class Server
         if (ConnectionPacket is ConnectionPackage packet)
         {
 
-            if (!connectedClients.Keys.Contains(packet.sender)&& packet.sender.ToLower()!="server")
+            if (!connectedClients.Keys.Contains(packet.sender) && packet.sender.ToLower() != "server")
             {
                 connectedClients[packet.sender] = packet.userId;
                 Client newClient = new Client() { id = packet.userId, Username = packet.sender };
@@ -133,7 +133,7 @@ public class Server
 
 
             }
-            else if(packet.sender.ToLower() == "server")
+            else if (packet.sender.ToLower() == "server")
             {
                 await HandleWrongCredentials("You cannot be named server!", handler, packet.sender);
             }
@@ -148,7 +148,7 @@ public class Server
         }
 
     }
-    private async Task HandleWrongCredentials(string returnMessage,Socket handler,string sender)
+    private async Task HandleWrongCredentials(string returnMessage, Socket handler, string sender)
     {
         DisconnectionPackage userTakenPacket = new DisconnectionPackage(sender, returnMessage);
         await TrySendObject(userTakenPacket, handler);
@@ -177,7 +177,7 @@ public class Server
                         MessagePacket targetDC = new MessagePacket("User you are trying to reach is offline!");
                         targetDC.isPersonal = true;
                         targetDC.targetUsername = package.sender;
-                        targetDC.sender =package.targetUsername;
+                        targetDC.sender = package.targetUsername;
                         await TrySendObject(targetDC, clientSocket);
                     }
                 }
@@ -274,12 +274,10 @@ public class Server
         }
         catch (Exception)
         {
-            if (!SocketConnected(clientSocket))
-            {
-                RemoveConnection(clientSocket);
-                return null;
-            }
+
+            RemoveConnection(clientSocket);
             return null;
+
         }
     }
     bool SocketConnected(Socket s)
@@ -309,7 +307,7 @@ public class Server
 
                 lengthPrefix.CopyTo(ret, 0);
                 newObj.CopyTo(ret, lengthPrefix.Length);
-
+                
                 memory.Position = 0;
                 await stream.WriteAsync(ret, 0, ret.Length);
             }
@@ -317,11 +315,7 @@ public class Server
         }
         catch (Exception)
         {
-            if (!SocketConnected(clientSocket))
-            {
-                RemoveConnection(clientSocket);
-                return;
-            }
+            RemoveConnection(clientSocket);
             return;
         }
     }

@@ -425,7 +425,15 @@ namespace TCP_Chat.ViewModels
                 await Connect();
                 if (SocketConnected(this.client.socket)&&package!=null)
                 {
-                    await this.client.TrySendObject(package);
+                    try
+                    {
+                        await this.client.TrySendObject(package);
+                    }
+                    catch (Exception)
+                    {
+                        this.client.Disconnect();
+                    }
+                    
                 }  
             }
             UpdatePersonalWindows();
@@ -475,6 +483,7 @@ namespace TCP_Chat.ViewModels
                     catch (Exception)
                     {
                         MessagePacket message = new MessagePacket(currentMessage);
+                        message.sender = this.client.Username;
                         await HandleDisconnection(message);
                     }
                     currentMessage = "";
