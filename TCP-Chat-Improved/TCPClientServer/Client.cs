@@ -41,25 +41,19 @@ namespace TCPClientServer
             {
                 this.socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
                 this.socket.Connect(endPoint);
-                if (SocketConnected(this.socket))
+                await TrySendObject(new ConnectionPackage(this.id, this.Username));
+                this.isConnected = true;
+                return true;
+            }
+            catch (Exception)
+            {
+                if (this.socket.Connected)
                 {
-                    this.isConnected = true;
-                    await TrySendObject(new ConnectionPackage(this.id, this.Username));
-                    return true;
-                }
-                else
-                {
-                    this.isConnected = false;
                     this.socket.Shutdown(SocketShutdown.Both);
                     this.socket.Close();
-                    return false;
                 }
-
-            }
-            catch (SocketException e)
-            {
                 this.isConnected = false;
-                throw e;
+                return false;
             }
 
         }
@@ -93,7 +87,7 @@ namespace TCPClientServer
 
                     memory.Position = 0;
 
-                   await stream.WriteAsync(ret, 0, ret.Length);
+                    await stream.WriteAsync(ret, 0, ret.Length);
 
                 }
             }
@@ -122,7 +116,7 @@ namespace TCPClientServer
             {
                 return await TryReceiveMessage();
             }
-            catch (Exception)
+            catch (IOException)
             {
 
                 throw;
@@ -143,7 +137,7 @@ namespace TCPClientServer
                 {
                     receivedObject = await tryReadObject();
                 }
-                catch (Exception)
+                catch (IOException)
                 {
                     throw;
                 }
@@ -161,10 +155,9 @@ namespace TCPClientServer
                     int lengthOffset = 0;
                     while (lengthOffset < 4)
                     {
-                        
+
                         lengthOffset += await stream.ReadAsync(lengthBuffer, lengthOffset, lengthBuffer.Length - lengthOffset);
                     }
-
                     int length = BitConverter.ToInt32(lengthBuffer, 0);
                     byte[] data = new byte[length];
                     int bytesRead = 0;
@@ -183,9 +176,13 @@ namespace TCPClientServer
                     return receivedPackage;
                 }
             }
-            catch (Exception)
+            catch (IOException)
             {
                 Disconnect(); //Disconnection and reconnection is later handled in MainWindowViewModel
+                throw;
+            }
+            catch (ObjectDisposedException)
+            {
                 throw;
             }
         }
@@ -203,6 +200,7 @@ namespace TCPClientServer
                 catch (Exception)
                 {
                     Disconnect();
+                    
                 }
             }
         }

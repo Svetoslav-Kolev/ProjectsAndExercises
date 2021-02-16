@@ -16,6 +16,7 @@ using TCP_Chat.Views;
 using System.Windows.Media.Imaging;
 using System.Drawing;
 using TCP_Chat.ValueConverters;
+using System.IO;
 
 namespace TCP_Chat.ViewModels
 {
@@ -111,7 +112,7 @@ namespace TCP_Chat.ViewModels
                 if (_connectCommand == null)
                 {
                     _connectCommand = new AsyncCommand(
-                        async() => await this.Connect(),
+                        async () => await this.Connect(),
                         param => this.CanConnect());
                 }
                 return _connectCommand;
@@ -126,7 +127,7 @@ namespace TCP_Chat.ViewModels
                 if (_disconnectCommand == null)
                 {
                     _disconnectCommand = new AsyncCommand(
-                        async() =>await  this.Disconnect(),
+                        async () => await this.Disconnect(),
                         param => this.CanDisconnect());
                 }
                 return _disconnectCommand;
@@ -141,7 +142,7 @@ namespace TCP_Chat.ViewModels
                 if (_sendCommand == null)
                 {
                     _sendCommand = new AsyncCommand(
-                        async() => await this.Send(),
+                        async () => await this.Send(),
                         param => this.CanSend());
                 }
                 return _sendCommand;
@@ -156,7 +157,7 @@ namespace TCP_Chat.ViewModels
                 if (_sendFileCommand == null)
                 {
                     _sendFileCommand = new AsyncCommand(
-                        async() =>await this.SendFile(),
+                        async () => await this.SendFile(),
                         param => this.CanSendFile());
                 }
                 return _sendFileCommand;
@@ -195,37 +196,32 @@ namespace TCP_Chat.ViewModels
         }
         private async Task Connect()
         {
-
-            //IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); - only needed when connecting to your LAN network automatically
-            //Failed connections take a while to display the "Connection failed message"
             IPAddress ipAddress = null;
             IPAddress.TryParse(serverIp, out ipAddress);
             client.Username = Username;
-            bool connect = false;
+
+            bool connected = false;
             attemptingConnection = true;
+
             if (ipAddress != null && this.port != 0)
             {
-                try
+                messages.Add(new ViewItemModel() { message = "Attempting to connect..." });
+
+                connected = await Task.Run(() => client.setEndPoint(ipAddress, this.port));
+                attemptingConnection = false;
+                if (connected == true)
                 {
-                    messages.Add(new ViewItemModel() { message = "Attempting to connect..." });
-                    connect = await Task.Run(() => client.setEndPoint(ipAddress, this.port));
-                    if (connect == false)
-                    {
-                        messages.Add(new ViewItemModel() { message = "Connection failed" });
-                    }
-                    attemptingConnection = false;
                     await receiveMessagesAsync();
                 }
-                catch (SocketException)
+                else
                 {
-                    attemptingConnection = false;
                     messages.Add(new ViewItemModel() { message = "Connection failed" });
                 }
             }
             else
             {
                 attemptingConnection = false;
-                messages.Add(new ViewItemModel() { message = "Connection failed" });
+                messages.Add(new ViewItemModel() { message = "Invalid Server Credentials" });
             }
         }
         bool SocketConnected(Socket s)
@@ -259,9 +255,13 @@ namespace TCP_Chat.ViewModels
                     Package message = await client.receiveMessageAsync();
                     await UpdateUI(message);
                 }
-                catch (Exception)
+                catch (IOException)
                 {
                     await HandleDisconnection();
+                }
+                catch (ObjectDisposedException) //Voluntary disconnected that disposes the reading socket 
+                {
+                    await HandleDisconnection(); 
                 }
 
             }
@@ -275,7 +275,8 @@ namespace TCP_Chat.ViewModels
                     messages.Add(new ViewItemModel { message = dcPackage.reason });
                     UpdatePersonalWindows();
                     CurrentUsers.Clear();
-                    await client.TryDisconnect();
+                    await client.TryDisconnect(); //sets request disconnection to true
+                    client.requestDisconnection = false;
                 }
                 else if (message is UsersPacket users)
                 {
@@ -390,12 +391,12 @@ namespace TCP_Chat.ViewModels
 
                     }
                 }
-                catch (Exception)
+                catch (ArgumentException)
                 {
 
                     messages.Add(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });
                 }
-               
+
             }
             else
             {
@@ -416,14 +417,16 @@ namespace TCP_Chat.ViewModels
         {
             if (this.client.requestDisconnection)
             {
-                
+
                 messages.Add(new ViewItemModel() { message = "You have been disconnected." });
+                this.client.requestDisconnection = false;
+                UpdatePersonalWindows();
             }
             else
             {
-                messages.Add(new ViewItemModel() { message = "You have been disconnected. Trying to reconnect..." });
+                messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
                 await Connect();
-                if (SocketConnected(this.client.socket)&&package!=null)
+                if (SocketConnected(this.client.socket) && package != null)
                 {
                     try
                     {
@@ -432,11 +435,16 @@ namespace TCP_Chat.ViewModels
                     catch (Exception)
                     {
                         this.client.Disconnect();
+                        UpdatePersonalWindows();
                     }
-                    
-                }  
+
+                }
+                else
+                {
+                    UpdatePersonalWindows();
+                }
             }
-            UpdatePersonalWindows();
+
         }
         private bool CanOpenWindow(object targetUser)
         {
@@ -478,7 +486,7 @@ namespace TCP_Chat.ViewModels
                 {
                     try
                     {
-                        await this.client.sendMessage(currentMessage);     
+                        await this.client.sendMessage(currentMessage);
                     }
                     catch (Exception)
                     {
@@ -507,7 +515,7 @@ namespace TCP_Chat.ViewModels
                 PersonalWindows.Add(target, personalWindow);
                 if (Packet is ImagePacket imgPacket)
                 {
-                    
+
                     personalWindow.AddImage(imgPacket);
                     Application.Current.Properties["personalWindows"] = PersonalWindows;
                     personalWindow.Show();

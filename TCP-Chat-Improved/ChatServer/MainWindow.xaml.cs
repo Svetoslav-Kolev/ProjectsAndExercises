@@ -30,7 +30,7 @@ namespace ChatServer
         public MainWindow()
         {
             InitializeComponent();
-            Closing += StopServer;
+            //Closing += StopServer;
         }
         public void StartServer(object senderObj, System.EventArgs e)
         {

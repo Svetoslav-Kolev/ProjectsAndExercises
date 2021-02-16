@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "qv2/O/B/SRbhCTtvp7ZZ99dcxMBxHItv+0It0wyx6audhx4z7zqsJvQXIcOIOHzX0/+6fZ+6i+7L8R3gR4B5ZQ==",
+  "dgSpecHash": "ZD5UEGzlJttkluTyVXCUZYGagFNeTvlEUNMckMDxzRJE0b4m0RlnRsLfAkul7SoA5ZPdY/w0vEraDOFFF5wCrw==",
   "success": true,
   "projectFilePath": "D:\\repos\\ProjectsAndExercises\\TCP-Chat-Improved\\TCP-Chat\\TCP-Chat.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\3.1.12\\microsoft.netcore.app.host.win-x64.3.1.12.nupkg.sha512"
+    "C:\\Users\\User\\.nuget\\packages\\system.drawing.common\\5.0.0\\system.drawing.common.5.0.0.nupkg.sha512"
   ],
   "logs": []
 }

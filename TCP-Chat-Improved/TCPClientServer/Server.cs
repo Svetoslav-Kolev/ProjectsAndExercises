@@ -52,14 +52,15 @@ public class Server
             this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
             this.socket.Listen(10);
             Task.Run(() => acceptConnections());
-
             this.IsRunning = true;
         }
         catch (Exception)
         {
             this.IsRunning = false;
-
-            throw;
+            this.socket.Shutdown(SocketShutdown.Both);
+            this.socket.Close();
+            connectedClients.Clear();
+            connections.Clear();
         }
 
     }
@@ -129,8 +130,6 @@ public class Server
 
                 updateUsers = UpdateUsersTask(newClient.socket);
                 await receiveMessagesTask(newClient.socket);
-
-
 
             }
             else if (packet.sender.ToLower() == "server")
@@ -272,7 +271,7 @@ public class Server
                 return receivedPackage;
             }
         }
-        catch (Exception)
+        catch (IOException)
         {
 
             RemoveConnection(clientSocket);
@@ -313,7 +312,7 @@ public class Server
             }
 
         }
-        catch (Exception)
+        catch (IOException)
         {
             RemoveConnection(clientSocket);
             return;
