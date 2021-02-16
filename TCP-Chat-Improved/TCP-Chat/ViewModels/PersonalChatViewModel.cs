@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -124,7 +125,7 @@ namespace TCP_Chat.ViewModels
 
                     messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)image, message = client.Username + "sent and Image!" });
                 }
-                catch (Exception)
+                catch (ArgumentException)
                 {
 
                     messages.Add(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });

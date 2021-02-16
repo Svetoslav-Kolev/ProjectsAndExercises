@@ -55,7 +55,6 @@ namespace TCPClientServer
                 this.isConnected = false;
                 return false;
             }
-
         }
         bool SocketConnected(Socket s)
         {
@@ -99,29 +98,15 @@ namespace TCPClientServer
         }
         public async Task sendMessage(string message)
         {
-            try
-            {
-                MessagePacket newMessage = new MessagePacket(message);
-                newMessage.sender = this.Username;
-                await TrySendObject(newMessage);
-            }
-            catch (IOException)
-            {
-                throw;
-            }
+
+            MessagePacket newMessage = new MessagePacket(message);
+            newMessage.sender = this.Username;
+            await TrySendObject(newMessage);
+
         }
         public async Task<Package> receiveMessageAsync()
         {
-            try
-            {
-                return await TryReceiveMessage();
-            }
-            catch (IOException)
-            {
-
-                throw;
-            }
-
+            return await TryReceiveMessage();
         }
         private async Task<Package> TryReceiveMessage()
         {
@@ -133,14 +118,9 @@ namespace TCPClientServer
 
             while (receivedObject == null)
             {
-                try
-                {
-                    receivedObject = await tryReadObject();
-                }
-                catch (IOException)
-                {
-                    throw;
-                }
+
+                receivedObject = await tryReadObject();
+
             }
             return receivedObject;
         }
@@ -195,8 +175,11 @@ namespace TCPClientServer
                 }
                 catch (Exception)
                 {
-                    Disconnect();
-                    
+                    if (this.socket.Connected)
+                    {
+                        Disconnect();
+                    }
+                   
                 }
             }
         }

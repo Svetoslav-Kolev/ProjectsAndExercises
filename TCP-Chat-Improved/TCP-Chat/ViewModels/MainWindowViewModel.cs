@@ -417,27 +417,30 @@ namespace TCP_Chat.ViewModels
         {
             if (this.client.requestDisconnection)
             {
-
+                //Requested Disconnection
                 messages.Add(new ViewItemModel() { message = "You have been disconnected." });
                 this.client.requestDisconnection = false;
                 UpdatePersonalWindows();
             }
             else
             {
+                //Forceful or unexpeted disconnection , try to reconnect , if you were sending an object resend it
                 messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
                 await Connect();
-                if (SocketConnected(this.client.socket) && package != null)
+                if (SocketConnected(this.client.socket))
                 {
-                    try
+                    if (package != null)
                     {
-                        await this.client.TrySendObject(package);
+                        try
+                        {
+                            await this.client.TrySendObject(package);
+                        }
+                        catch (IOException)
+                        {
+                            UpdatePersonalWindows();
+                        }
                     }
-                    catch (Exception)
-                    {
-                        this.client.Disconnect();
-                        UpdatePersonalWindows();
-                    }
-
+                   
                 }
                 else
                 {
