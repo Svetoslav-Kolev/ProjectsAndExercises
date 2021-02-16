@@ -259,7 +259,7 @@ namespace TCP_Chat.ViewModels
                 {
                     await HandleDisconnection();
                 }
-                catch (ObjectDisposedException) //Voluntary disconnected that disposes the reading socket 
+                catch (ObjectDisposedException) //Can be a voluntary disconnect that disposes the reading socket
                 {
                     await HandleDisconnection(); 
                 }

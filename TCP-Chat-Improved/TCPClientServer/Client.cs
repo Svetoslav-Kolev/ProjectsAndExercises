@@ -181,10 +181,6 @@ namespace TCPClientServer
                 Disconnect(); //Disconnection and reconnection is later handled in MainWindowViewModel
                 throw;
             }
-            catch (ObjectDisposedException)
-            {
-                throw;
-            }
         }
         public async Task TryDisconnect()
         {
