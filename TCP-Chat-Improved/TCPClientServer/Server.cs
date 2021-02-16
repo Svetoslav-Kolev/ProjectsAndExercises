@@ -271,7 +271,7 @@ public class Server
                 return receivedPackage;
             }
         }
-        catch (IOException)
+        catch (Exception)
         {
 
             RemoveConnection(clientSocket);
@@ -312,7 +312,7 @@ public class Server
             }
 
         }
-        catch (IOException)
+        catch (Exception)
         {
             RemoveConnection(clientSocket);
             return;

@@ -292,7 +292,7 @@ namespace TCP_Chat.ViewModels
                             PersonalWindows[Message.sender].AddMessage(Message);
                         }
                         else
-                        {
+                        { 
                             CreatePersonalWindow(Message.sender, Message);
                         }
                     }
@@ -423,11 +423,12 @@ namespace TCP_Chat.ViewModels
             {
                 //Forceful or unexpeted disconnection , try to reconnect , if you were sending an object resend it
                 
-                if (attemptingConnection == false)
+                if (attemptingConnection == false) //In case of 2 simultanious errors , preventing 2 connection attempts
                 {
                     messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
                     await Connect();
                 }
+
                 if (SocketConnected(this.client.socket))
                 {
                     if (package != null)
