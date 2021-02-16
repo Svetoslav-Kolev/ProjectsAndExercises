@@ -196,6 +196,7 @@ namespace TCP_Chat.ViewModels
         }
         private async Task Connect()
         {
+
             IPAddress ipAddress = null;
             IPAddress.TryParse(serverIp, out ipAddress);
             client.Username = Username;
@@ -255,13 +256,9 @@ namespace TCP_Chat.ViewModels
                     Package message = await client.receiveMessageAsync();
                     await UpdateUI(message);
                 }
-                catch (IOException)
+                catch (Exception)
                 {
                     await HandleDisconnection();
-                }
-                catch (ObjectDisposedException) //Can be a voluntary disconnect that disposes the reading socket
-                {
-                    await HandleDisconnection(); 
                 }
 
             }
@@ -425,8 +422,12 @@ namespace TCP_Chat.ViewModels
             else
             {
                 //Forceful or unexpeted disconnection , try to reconnect , if you were sending an object resend it
-                messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
-                await Connect();
+                
+                if (attemptingConnection == false)
+                {
+                    messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
+                    await Connect();
+                }
                 if (SocketConnected(this.client.socket))
                 {
                     if (package != null)
@@ -435,12 +436,16 @@ namespace TCP_Chat.ViewModels
                         {
                             await this.client.TrySendObject(package);
                         }
-                        catch (IOException)
+                        catch (Exception)
                         {
+                            if (this.client.socket.Connected)
+                            {
+                                this.client.Disconnect();
+                            }
                             UpdatePersonalWindows();
                         }
                     }
-                   
+
                 }
                 else
                 {
