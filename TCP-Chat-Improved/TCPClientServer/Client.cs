@@ -90,9 +90,13 @@ namespace TCPClientServer
 
                 }
             }
-            catch (IOException)
+            catch (Exception)
             {
-                Disconnect(); //Disconnection and reconnection is later handled in MainWindowViewModel
+                if (this.socket.Connected)
+                {
+                    Disconnect();
+                }
+                //Disconnection and reconnection is later handled in MainWindowViewModel
                 throw;
             }
         }
@@ -156,9 +160,13 @@ namespace TCPClientServer
                     return receivedPackage;
                 }
             }
-            catch (IOException)
+            catch (Exception)
             {
-                Disconnect(); //Disconnection and reconnection is later handled in MainWindowViewModel
+                if (this.socket.Connected)
+                {
+                    Disconnect();
+                }
+                //Disconnection and reconnection is later handled in MainWindowViewModel
                 throw;
             }
         }
@@ -179,7 +187,7 @@ namespace TCPClientServer
                     {
                         Disconnect();
                     }
-                   
+
                 }
             }
         }
