@@ -45,7 +45,7 @@ namespace TCPClientServer
                 this.isConnected = true;
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 if (this.socket.Connected)
                 {
@@ -90,7 +90,7 @@ namespace TCPClientServer
 
                 }
             }
-            catch (Exception)
+            catch 
             {
                 if (this.socket.Connected)
                 {
@@ -160,7 +160,7 @@ namespace TCPClientServer
                     return receivedPackage;
                 }
             }
-            catch (Exception)
+            catch
             {
                 if (this.socket.Connected)
                 {
@@ -181,7 +181,7 @@ namespace TCPClientServer
                     await TrySendObject(dcPackage);
                     Disconnect();
                 }
-                catch (Exception)
+                catch
                 {
                     if (this.socket.Connected)
                     {

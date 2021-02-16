@@ -256,7 +256,7 @@ namespace TCP_Chat.ViewModels
                     Package message = await client.receiveMessageAsync();
                     await UpdateUI(message);
                 }
-                catch (Exception)
+                catch
                 {
                     await HandleDisconnection();
                 }
@@ -381,7 +381,7 @@ namespace TCP_Chat.ViewModels
                         {
                             await this.client.TrySendObject(imagePacket);
                         }
-                        catch (Exception)
+                        catch
                         {
                             await HandleDisconnection(imagePacket);
                         }
@@ -437,7 +437,7 @@ namespace TCP_Chat.ViewModels
                         {
                             await this.client.TrySendObject(package);
                         }
-                        catch (Exception)
+                        catch
                         {
                             if (this.client.socket.Connected)
                             {
@@ -497,7 +497,7 @@ namespace TCP_Chat.ViewModels
                     {
                         await this.client.sendMessage(currentMessage);
                     }
-                    catch (Exception)
+                    catch
                     {
                         MessagePacket message = new MessagePacket(currentMessage);
                         message.sender = this.client.Username;

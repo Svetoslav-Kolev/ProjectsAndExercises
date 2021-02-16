@@ -108,7 +108,7 @@ namespace TCP_Chat.ViewModels
                     {
                         await this.client.TrySendObject(imagePacket);
                     }
-                    catch (Exception)
+                    catch
                     {
 
                         if (this.client.requestDisconnection)
@@ -163,7 +163,7 @@ namespace TCP_Chat.ViewModels
                         messages.Add(new ViewItemModel() { message = client.Username + ":" + personalMessage.message });
                         currentMessage = "";
                     }
-                    catch (Exception)
+                    catch 
                     {
                         if (this.client.requestDisconnection)
                         {
