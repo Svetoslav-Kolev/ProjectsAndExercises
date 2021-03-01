@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5a71da20fea24cba8a3d369ebfcd6116" Name="Diagram1">
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.CustomerReviews" Width="1.5" PointX="5.25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.Employees" Width="1.5" PointX="3.75" PointY="8.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.OrderDetails" Width="1.5" PointX="8.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.OrderHistory" Width="1.5" PointX="6" PointY="10" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.ProductCategories" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.Products" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ElectronicsShopDBModel.Users" Width="1.5" PointX="3.75" PointY="11.875" IsExpanded="true" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK__CustomerR__Produ__3B40CD36" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK__OrderHist__Emplo__7F2BE32F" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK__OrderDeta__Order__7FEAFD3E" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK__OrderDeta__Produ__00DF2177" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK__OrderHist__Custo__4D5F7D71" ManuallyRouted="false" />
+        <AssociationConnector Association="ElectronicsShopDBModel.FK_ProductCategory" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

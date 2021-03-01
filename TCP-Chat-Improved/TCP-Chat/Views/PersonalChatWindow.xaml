@@ -44,7 +44,7 @@
             <TextBox Height="70" Width="400" BorderBrush="Black" BorderThickness="2" MaxWidth="400" TextWrapping="Wrap" x:Name="SendMessageBox" Text="{Binding currentMessage,UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"/>
 
             <Button  HorizontalAlignment="Center" VerticalAlignment="Top"  Content="Send"  Command="{Binding sendCommand}"  Width="400" Height="50" FontSize="30"/>
-            <Button Name="btnOpenFile"  Command="{Binding sendFileCommand}">Open file</Button>
+            <Button Name="btnOpenFile" Click="SendFile_Clicked">Open file</Button>
         </StackPanel>
     </Grid>
 </Window>

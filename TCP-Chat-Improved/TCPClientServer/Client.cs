@@ -179,15 +179,18 @@ namespace TCPClientServer
                 {
                     DisconnectionPackage dcPackage = new DisconnectionPackage(Username, "Request disconnection");
                     await TrySendObject(dcPackage);
-                    Disconnect();
+                   
                 }
                 catch
+                {
+
+                }
+                finally
                 {
                     if (this.socket.Connected)
                     {
                         Disconnect();
                     }
-
                 }
             }
         }

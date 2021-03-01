@@ -1,0 +1,26 @@
+﻿<Window x:Class="ElectronicShopManager.Views.OrderDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ElectronicShopManager.Views"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="OrderDetailsWindow" Height="Auto" Width="800">
+    <StackPanel>
+        <DataGrid IsReadOnly="True" ItemsSource="{Binding Details}" AutoGeneratingColumn="OrderGrid_AutoGeneratingColumn" SelectedItem="{Binding SelectedDetail}">
+        </DataGrid>
+       
+        <Line Width="450" Margin="20" StrokeThickness="1" Stroke="Black"/>
+        <Label Content="Options to add or remove a detail" HorizontalAlignment="Center"/>
+        <Label Content="Product to purchase:"/>
+        <ComboBox x:Name="ProductsComboBox" ItemsSource="{Binding Products,Mode=TwoWay}" DisplayMemberPath="Value" SelectedValuePath="Key" SelectedValue="{Binding SelectedProductID}"/>
+        <Label Content="Quantity of product to purchase (select a product before selecting quantity):"/>
+        <ComboBox x:Name="QuantitiesComboBox" ItemsSource="{Binding Quantity}" ToolTip="Must select a product before selecting quantity" SelectedItem="{Binding SelectedQuantity}"/>
+        <Label Content="Discount: (in percentages)"/>
+        <xctk:IntegerUpDown Maximum="100" Value="{Binding Discount}" Name="myUpDownControl" Minimum="0"  />
+        <Button Content="Add Details for the order" ToolTip="Please fill out all details first" ToolTipService.ShowOnDisabled="True" Command="{Binding AddDetailsCommand}" Margin="0 50 0 0" Width="150" Height="30"/>
+        <Button Content="Remove Order Detail" ToolTip="Select detail to remove first" ToolTipService.ShowOnDisabled="True" Command="{Binding RemoveDetailCommand}" Margin="0 50 0 0" Width="150" Height="30"/>
+        <TextBlock Text="{Binding Notification}" HorizontalAlignment="Center"/>
+    </StackPanel>
+</Window>

@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Drawing;
 using TCP_Chat.ValueConverters;
 using System.IO;
+using TCP_Chat.Models;
 
 namespace TCP_Chat.ViewModels
 {
@@ -24,7 +25,20 @@ namespace TCP_Chat.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public Client client { get; set; }
+        
+        public string filePath = string.Empty;
         private bool attemptingConnection;
+
+        private bool _CanSendBool = false;
+        public bool CanSendBool 
+        {
+            get { return _CanSendBool; }
+            set
+            {
+                _CanSendBool = value; 
+                OnPropertyChanged("CanSendBool"); 
+            }
+        }
         private string _serverIp;
         public string serverIp
         {
@@ -58,18 +72,24 @@ namespace TCP_Chat.ViewModels
             set { _currentMessage = value; OnPropertyChanged("currentMessage"); }
         }
         private string _username = "";
-
         public string Username
         {
             get { return _username; }
             set { _username = value; OnPropertyChanged("Username"); }
         }
+
         private ObservableCollection<ViewItemModel> _messages = new ObservableCollection<ViewItemModel>();
-        public ObservableCollection<ViewItemModel> messages
+        public ObservableCollection<ViewItemModel> Messages
         {
             get { return _messages; }
             set { _messages = value; OnPropertyChanged("messages"); }
         }
+        //private MessageCollection _messageCollection = new MessageCollection();
+        //public MessageCollection messageCollection
+        //{
+        //    get { return _messageCollection; }
+        //    set { _messageCollection = value;OnPropertyChanged("messageCollection"); }
+        //}
 
         private ObservableCollection<Button> _currentUsers = new ObservableCollection<Button>();
         public ObservableCollection<Button> CurrentUsers
@@ -78,13 +98,9 @@ namespace TCP_Chat.ViewModels
             set { _currentUsers = value; OnPropertyChanged("CurrentUsers"); }
         }
 
-        public TextBlock chatTextBlock;
-
-        public OpenFileDialog fileDialog;
         public MainWindowViewModel()
         {
             this.client = new Client();
-            this.chatTextBlock = new TextBlock();
             this.PersonalWindows = new Dictionary<string, PersonalChatWindow>();
             Application.Current.Properties["personalWindows"] = this.PersonalWindows; //Chat windows for personal chat with other users
         }
@@ -142,8 +158,8 @@ namespace TCP_Chat.ViewModels
                 if (_sendCommand == null)
                 {
                     _sendCommand = new AsyncCommand(
-                        async () => await this.Send(),
-                        param => this.CanSend());
+                        async () => await Send(),
+                        param => CanSend());
                 }
                 return _sendCommand;
             }
@@ -157,8 +173,8 @@ namespace TCP_Chat.ViewModels
                 if (_sendFileCommand == null)
                 {
                     _sendFileCommand = new AsyncCommand(
-                        async () => await this.SendFile(),
-                        param => this.CanSendFile());
+                        async () => await SendFile(),
+                        param => CanSend());
                 }
                 return _sendFileCommand;
             }
@@ -206,7 +222,7 @@ namespace TCP_Chat.ViewModels
 
             if (ipAddress != null && this.port != 0)
             {
-                messages.Add(new ViewItemModel() { message = "Attempting to connect..." });
+                AddMessage(new ViewItemModel() { message = "Attempting to connect..." });
 
                 connected = await Task.Run(() => client.setEndPoint(ipAddress, this.port));
                 attemptingConnection = false;
@@ -216,13 +232,13 @@ namespace TCP_Chat.ViewModels
                 }
                 else
                 {
-                    messages.Add(new ViewItemModel() { message = "Connection failed" });
+                    AddMessage(new ViewItemModel() { message = "Connection failed" });
                 }
             }
             else
             {
                 attemptingConnection = false;
-                messages.Add(new ViewItemModel() { message = "Invalid Server Credentials" });
+                AddMessage(new ViewItemModel() { message = "Invalid Server Credentials" });
             }
         }
         bool SocketConnected(Socket s)
@@ -269,7 +285,7 @@ namespace TCP_Chat.ViewModels
             {
                 if (message is DisconnectionPackage dcPackage)
                 {
-                    messages.Add(new ViewItemModel { message = dcPackage.reason });
+                    AddMessage(new ViewItemModel { message = dcPackage.reason });
                     UpdatePersonalWindows();
                     CurrentUsers.Clear();
                     await client.TryDisconnect(); //sets request disconnection to true
@@ -298,7 +314,7 @@ namespace TCP_Chat.ViewModels
                     }
                     else
                     {
-                        messages.Add(new ViewItemModel() { message = Message.sender + ": " + Message.message });
+                       AddMessage(new ViewItemModel() { message = Message.sender + ": " + Message.message });
                     }
                 }
                 else if (message is ImagePacket imgPacket)
@@ -321,7 +337,7 @@ namespace TCP_Chat.ViewModels
                         BitmapToImageConverter converter = new BitmapToImageConverter();
                         var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
-                        messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage, message = imgPacket.sender + " sent an Image!" });
+                        AddMessage(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage, message = imgPacket.sender + " sent an Image!" });
 
                     }
                 }
@@ -347,29 +363,12 @@ namespace TCP_Chat.ViewModels
                 CurrentUsers.Add(userButton);
             }
         }
-        private bool CanSendFile()
-        {
-            if (this.client.isConnected)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
         private async Task SendFile()
         {
             if (this.client.isConnected)
             {
                 try
                 {
-                    fileDialog = new OpenFileDialog();
-                    fileDialog.ShowDialog();
-                    fileDialog.DefaultExt = ".png";
-                    fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
-
-                    string filePath = fileDialog.FileName;
 
                     if (filePath != null && filePath != string.Empty)
                     {
@@ -391,15 +390,24 @@ namespace TCP_Chat.ViewModels
                 catch (ArgumentException)
                 {
 
-                    messages.Add(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });
+                    AddMessage(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });
+                    
+                }
+                finally
+                {
+                    filePath = string.Empty;
                 }
 
             }
             else
             {
-                messages.Add(new ViewItemModel() { message = "You are not connected" });
+                AddMessage(new ViewItemModel() { message = "You are not connected" });
             }
-
+            filePath = string.Empty;
+        }
+        public void AddMessage(ViewItemModel item)
+        {
+            Messages.Add(item);
         }
         private void UpdatePersonalWindows() // inform personal chat windows that you have been disconnected
         {
@@ -415,7 +423,7 @@ namespace TCP_Chat.ViewModels
             if (this.client.requestDisconnection)
             {
                 //Requested Disconnection
-                messages.Add(new ViewItemModel() { message = "You have been disconnected." });
+                AddMessage(new ViewItemModel() { message = "You have been disconnected." });
                 this.client.requestDisconnection = false;
                 UpdatePersonalWindows();
             }
@@ -425,7 +433,7 @@ namespace TCP_Chat.ViewModels
                 
                 if (attemptingConnection == false) //In case of 2 simultanious errors , preventing 2 connection attempts
                 {
-                    messages.Add(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
+                    AddMessage(new ViewItemModel() { message = "Connection lost. Trying to reconnect..." });
                     await Connect();
                 }
 
@@ -479,10 +487,12 @@ namespace TCP_Chat.ViewModels
         {
             if (this.client.isConnected)
             {
+                CanSendBool = true;
                 return true;
             }
             else
             {
+                CanSendBool = false;
                 return false;
             }
 
@@ -507,7 +517,7 @@ namespace TCP_Chat.ViewModels
                 }
                 else if (currentMessage.Length > 150)
                 {
-                    messages.Add(new ViewItemModel() { message = "Your message is too long! Max Length is 150 characters." });
+                    AddMessage(new ViewItemModel() { message = "Your message is too long! Max Length is 150 characters." });
                 }
 
             }
@@ -538,7 +548,6 @@ namespace TCP_Chat.ViewModels
 
             });
         }
-
         public async void WindowClosing(object sender, CancelEventArgs e)
         {
             await this.Disconnect();

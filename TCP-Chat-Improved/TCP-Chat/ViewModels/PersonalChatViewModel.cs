@@ -23,6 +23,7 @@ namespace TCP_Chat.ViewModels
             get { return _targetUsername; }
             set { _targetUsername = value; OnPropertyChanged("currentMessage"); }
         }
+        public string filePath = string.Empty;
         public Client client { get; set; }
         private ObservableCollection<ViewItemModel> _messages = new ObservableCollection<ViewItemModel>();
         public ObservableCollection<ViewItemModel> messages
@@ -63,7 +64,6 @@ namespace TCP_Chat.ViewModels
             }
         }
         private ICommand _sendFileCommand;
-        private OpenFileDialog fileDialog;
 
         public ICommand sendFileCommand
         {
@@ -92,13 +92,7 @@ namespace TCP_Chat.ViewModels
             if (this.client.isConnected)
             {
                 try
-                {
-                    fileDialog = new OpenFileDialog();
-                    fileDialog.ShowDialog();
-                    fileDialog.DefaultExt = ".png";
-                    fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
-
-                    string filePath = fileDialog.FileName;
+                {                    
                     ImagePacket imagePacket = new ImagePacket();
                     imagePacket.Imagebmp = new System.Drawing.Bitmap(filePath);
                     imagePacket.isPersonal = true;
@@ -113,22 +107,28 @@ namespace TCP_Chat.ViewModels
 
                         if (this.client.requestDisconnection)
                         {
-                            messages.Add(new ViewItemModel() { message = "You have been disconnected." });
+                            AddMessage(new ViewItemModel() { message = "You have been disconnected." });
                         }
                         else
                         {
-                            messages.Add(new ViewItemModel() { message = "You have been forcefully disconnected. Try to reconnect from the main window." });
+                            AddMessage(new ViewItemModel() { message = "You have been forcefully disconnected. Try to reconnect from the main window." });
                         }
+                       
+                    }
+                    finally
+                    {
+                        filePath = string.Empty;
                     }
                     BitmapToImageConverter bmpConverter = new BitmapToImageConverter();
                     var image = bmpConverter.Convert(imagePacket.Imagebmp);
 
-                    messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)image, message = client.Username + "sent and Image!" });
+                    AddMessage(new ViewItemModel() { bmpImage = (BitmapImage)image, message = client.Username + "sent and Image!" });
                 }
                 catch (ArgumentException)
                 {
 
-                    messages.Add(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });
+                    AddMessage(new ViewItemModel() { message = "File is not in a valid format, please send only  jpeg, png , gif or jpg files!" });
+                    filePath = string.Empty;
                 }
 
 
@@ -136,10 +136,9 @@ namespace TCP_Chat.ViewModels
             else
             {
 
-                messages.Add(new ViewItemModel() { message = "Not connected" });
-
+                AddMessage(new ViewItemModel() { message = "Not connected" });
             }
-
+            filePath = string.Empty;
         }
         private bool CanSend()
         {
@@ -167,18 +166,18 @@ namespace TCP_Chat.ViewModels
                     {
                         if (this.client.requestDisconnection)
                         {
-                            messages.Add(new ViewItemModel() { message = "You have been disconnected." });
+                            AddMessage(new ViewItemModel() { message = "You have been disconnected." });
                         }
                         else
                         {
-                            messages.Add(new ViewItemModel() { message = "You have been forcefully disconnected. Try to reconnect from the Main window" });
+                            AddMessage(new ViewItemModel() { message = "You have been forcefully disconnected. Try to reconnect from the Main window" });
                         }
                     }
 
                 }
                 else if (currentMessage.Length > 150)
                 {
-                    messages.Add(new ViewItemModel() { message = "Your message is too long! Max Lenght is 150 characters" });
+                    AddMessage(new ViewItemModel() { message = "Your message is too long! Max Lenght is 150 characters" });
                 }
 
             }
@@ -186,6 +185,10 @@ namespace TCP_Chat.ViewModels
             {
                 currentMessage = "Not connected";
             }
+        }
+        public void AddMessage(ViewItemModel item)
+        {
+            messages.Add(item);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace TCP_Chat
     public class ViewItemModel
     {
         public string message { get; set; }
-
         public BitmapImage bmpImage { get; set; }
     }
 }

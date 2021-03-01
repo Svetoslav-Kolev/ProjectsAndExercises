@@ -12,17 +12,18 @@ namespace TCP_Chat
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowViewModel vm;
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
-            MainWindowViewModel vm = (MainWindowViewModel)this.DataContext;
+            vm = (MainWindowViewModel)this.DataContext;
             Closing += vm.WindowClosing;
 
 
 
             //Auto scrolling 
-            vm.messages.CollectionChanged += (sender, e) =>
+            vm.Messages.CollectionChanged += (sender, e) =>
              {
                  if (e.NewItems != null)
                  {
@@ -31,6 +32,20 @@ namespace TCP_Chat
                      scroll.ScrollToBottom();
                  }
              };
+        }
+        private void SendFile_Clicked(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ShowDialog();
+            fileDialog.DefaultExt = ".png";
+            fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
+
+            string filePath = fileDialog.FileName;
+            vm.filePath = filePath;
+            if (vm.sendFileCommand.CanExecute(null))
+                vm.sendFileCommand.Execute(filePath);
+           
+           
         }
     }
 }

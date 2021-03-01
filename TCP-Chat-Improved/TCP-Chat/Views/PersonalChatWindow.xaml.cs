@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -31,7 +32,19 @@ namespace TCP_Chat.Views
             
 
         }
+        private void SendFile_Clicked(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.ShowDialog();
+            fileDialog.DefaultExt = ".png";
+            fileDialog.Filter = "JPEG Files (*.jpeg)|*.jpeg|PNG Files (*.png)|*.png|JPG Files (*.jpg)|*.jpg|GIF Files (*.gif)|*.gif";
 
+            string filePath = fileDialog.FileName;
+            viewModel.filePath = filePath;
+            if (viewModel.sendFileCommand.CanExecute(null))
+                viewModel.sendFileCommand.Execute(filePath);
+
+        }
         private void PersonalChatWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Dictionary<string ,PersonalChatWindow> windowsDictionary =(Dictionary<string,PersonalChatWindow>) Application.Current.Properties["personalWindows"];
@@ -41,7 +54,7 @@ namespace TCP_Chat.Views
 
         public void AddMessage(MessagePacket messagePacket)
         {
-            viewModel.messages.Add(new ViewItemModel() { message = messagePacket.sender + ":" + messagePacket.message });
+            viewModel.AddMessage(new ViewItemModel() { message = messagePacket.sender + ":" + messagePacket.message });
 
 
             //add autoscrolling when first collection message is added
@@ -55,7 +68,7 @@ namespace TCP_Chat.Views
             BitmapToImageConverter converter = new BitmapToImageConverter();
             var receivedImage = converter.Convert(imgPacket.Imagebmp);
 
-            viewModel.messages.Add(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage , message = imgPacket.sender + " sent an Image!" });
+            viewModel.AddMessage(new ViewItemModel() { bmpImage = (BitmapImage)receivedImage , message = imgPacket.sender + " sent an Image!" });
 
             //add autoscrolling when first collection message is added
             if (viewModel.messages.Count == 1)

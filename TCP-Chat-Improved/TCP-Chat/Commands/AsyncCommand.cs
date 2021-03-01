@@ -26,19 +26,18 @@ namespace TCP_Chat.Commands
         {
             CommandManager.InvalidateRequerySuggested();
         }
-
     }
     public class AsyncCommand : AsyncCommandBase
     {
-        private readonly Func<Task> _command;
+        private readonly Func<Task> _execute;
         private readonly Predicate<object> _canExecute;
-        public AsyncCommand(Func<Task> command,Predicate<object> canExecute)
+        public AsyncCommand(Func<Task> execute,Predicate<object> canExecute)
         {
-            if(command == null)
+            if(execute == null)
             {
                 throw new ArgumentNullException("execute");
             }
-            _command = command;
+            _execute = execute;
             _canExecute = canExecute;
         }
         public override bool CanExecute(object parameter)
@@ -47,7 +46,7 @@ namespace TCP_Chat.Commands
         }
         public override Task ExecuteAsync(object parameter)
         {
-            return _command();
+            return _execute();
         }
     }
    
