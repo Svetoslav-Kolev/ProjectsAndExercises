@@ -1,14 +1,18 @@
-﻿using ElectronicShopManager.Models;
+﻿using Dapper;
+using ElectronicShopManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace ElectronicShopManager.Services
 {
+   
     public class DataUpdateService // Used for any queries that actually update the database
     {
+        private readonly string strConn = "Data Source=localhost\\SQLEXPRESS01;Database=ElectronicsShopDB;Trusted_Connection=True";
         public async Task ModifyOrderAsync(OrderHistory modifiedOrder)
         {
             await Task.Run(() => ModifyOrder(modifiedOrder));
@@ -40,11 +44,11 @@ namespace ElectronicShopManager.Services
             dbEntities.OrderHistory.Where(o => o.OrderID == detailsToRemove.OrderID).FirstOrDefault().TotalPrice = newPrice;
             dbEntities.SaveChanges();
         }
-        public async Task AddOrderDetailAsync(OrderDetails details)
+        public async Task<OrderDetails> AddOrderDetailAsync(OrderDetails details)
         {
-            await Task.Run(() => AddOrderDetail(details));
+           return await Task.Run(() => AddOrderDetail(details));
         }
-        public void AddOrderDetail(OrderDetails details)
+        public OrderDetails AddOrderDetail(OrderDetails details)
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
 
@@ -62,6 +66,7 @@ namespace ElectronicShopManager.Services
             decimal newPrice = GetNewPrice(details.OrderID);
             dbEntities.OrderHistory.Where(x => x.OrderID == details.OrderID).FirstOrDefault().TotalPrice = newPrice;
             dbEntities.SaveChanges();
+            return detailsToAdd;
         }
         public async Task AddOrderAsync(Users currentUser, OrderHistory order, OrderDetails details)
         {
@@ -100,7 +105,7 @@ namespace ElectronicShopManager.Services
         private decimal GetNewPrice(int orderID) //Gets the collective price of the order from all of its details
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            List<OrderDetails> allDetails = dbEntities.OrderDetails.Where(x => x.OrderID == orderID).ToList();
+            List<OrderDetails> allDetails = dbEntities.OrderDetails.AsNoTracking().Where(x => x.OrderID == orderID).ToList();
             decimal newPrice = 0;
             foreach (var detail in allDetails)
             {
@@ -110,8 +115,18 @@ namespace ElectronicShopManager.Services
         }
         private decimal GetProductPrice(int productID)
         {
+
+            //var sql = (,);
+            //using (SqlConnection connection = new SqlConnection(strConn))
+            //{
+            //    var dapperProduct = connection.Query("Select [Price] From Products Where [Products].[ProductID] = @productID", new { productID = productID }).ToList().FirstOrDefault();
+            //}
+         
+
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            decimal price = dbEntities.Products.Where(p => p.ProductID == productID).FirstOrDefault().Price;
+            decimal price = dbEntities.Products.AsNoTracking().Where(p => p.ProductID == productID).FirstOrDefault().Price;
+
+
             return price;
         }
         private string GetRandomString(int length) //Generates an example receipt number  

@@ -4,6 +4,7 @@ using ElectronicShopManager.Services;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace ElectronicShopManager.ViewModels
         private async Task UpdateDetails()
         {
             DataAccessService dataService = new DataAccessService();
-            Details =await dataService.ViewDetailsAsync(OrderID);
+            Details = new ObservableCollection<OrderDetails>(await dataService.ViewDetailsAsync(OrderID));
         }
         private string notification;
         public string Notification
@@ -68,8 +69,8 @@ namespace ElectronicShopManager.ViewModels
                 Task.Run(()=>RaisePropertyChanged("OrderID"));
             }
         }
-        private List<OrderDetails> details;
-        public List<OrderDetails> Details
+        private ObservableCollection<OrderDetails> details;
+        public ObservableCollection<OrderDetails> Details
         {
             get
             {
@@ -199,11 +200,10 @@ namespace ElectronicShopManager.ViewModels
                 details.OrderID = OrderID;
                 details.Quantity = SelectedQuantity;
                 details.ProductID = SelectedProductID;
-                details.Discount = Discount;
-
+                details.Discount = Discount;    
                 DataUpdateService updateService = new DataUpdateService();
-                await updateService.AddOrderDetailAsync(details);
-                await UpdateDetails();
+                OrderDetails addedDetail = await updateService.AddOrderDetailAsync(details);
+                Details.Add(addedDetail);
 
                 SelectedProductID = -1;
                 SelectedQuantity = -1;
@@ -248,7 +248,8 @@ namespace ElectronicShopManager.ViewModels
             {
                 DataUpdateService updateService = new DataUpdateService();
                 await updateService.DeleteOrderDetailAsync(selectedDetail.OrderDetailID);
-                await UpdateDetails();
+                OrderDetails detailToRemove = Details.Where(d => d.OrderDetailID == SelectedDetail.OrderDetailID).FirstOrDefault();
+                Details.Remove(detailToRemove);
                 selectedDetail = null;
                 Notification = "Details removed successfuly";
             }

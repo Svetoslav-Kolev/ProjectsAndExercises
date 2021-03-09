@@ -77,7 +77,7 @@ namespace ElectronicShopManager.Services
         {
             ElectronicsShopDBEntities1 dBEntities = new ElectronicsShopDBEntities1();
 
-            List<OrderHistory> orders = dBEntities.OrderHistory.Where(o => o.CustomerID == userID).ToList();
+            List<OrderHistory> orders = dBEntities.OrderHistory.AsNoTracking().Where(o => o.CustomerID == userID).ToList();
             return orders;
         }
         public async Task<Dictionary<int, string>> GetCustomersAsync()
@@ -139,7 +139,7 @@ namespace ElectronicShopManager.Services
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
             if(productID!=-1)
-            return dbEntities.Products.Where(x => x.ProductID == productID).FirstOrDefault().StockQuantity;
+            return dbEntities.Products.AsNoTracking().Where(x => x.ProductID == productID).FirstOrDefault().StockQuantity;
 
             return 0;
         }
@@ -151,7 +151,7 @@ namespace ElectronicShopManager.Services
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
 
-            List<OrderDetails> details = dbEntities.OrderDetails.Where(d => d.OrderID == OrderID).ToList();
+            List<OrderDetails> details = dbEntities.OrderDetails.AsNoTracking().Where(d => d.OrderID == OrderID).ToList();
 
             return details;
         }

@@ -115,7 +115,8 @@ namespace ElectronicShopManager.ViewModels
         {
             DataUpdateService updateService = new DataUpdateService();
             await updateService.DeleteOrderAsync(SelectedOrder.OrderID);
-            await GetOrders();
+            OrderHistory orderToRemove = OrderData.Where(o => o.OrderID == SelectedOrder.OrderID).FirstOrDefault();
+            OrderData.Remove(orderToRemove);
         }
 
     }
