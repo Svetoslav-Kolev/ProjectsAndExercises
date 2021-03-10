@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-D:\vsProjects\ElectronicShopManager\ElectronicShopManager\obj\Debug\
+D:\repos\ProjectsAndExercises\ElectronicShopManager\ElectronicShopManager\obj\Debug\
 ElectronicShopManager
 none
 false
 DEBUG;TRACE
-D:\vsProjects\ElectronicShopManager\ElectronicShopManager\App.xaml
+D:\repos\ProjectsAndExercises\ElectronicShopManager\ElectronicShopManager\App.xaml
 5-1170142588
 2375911724
 341276835437
-2474991855
+341098757742
 Views\AccountManagementWindow.xaml;Views\AddOrderWindow.xaml;Views\LoginFormWindow.xaml;Views\ModifyOrderView.xaml;Views\OrderDetailsWindow.xaml;
 
 False

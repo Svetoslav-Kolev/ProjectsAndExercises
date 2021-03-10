@@ -1,6 +1,7 @@
 ﻿using ElectronicShopManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
@@ -12,10 +13,17 @@ namespace ElectronicShopManager.Services
 {
     public class DataAccessService // Used for queries that access and return , but do not update data
     {
-        private readonly string strConn = "Data Source=localhost\\SQLEXPRESS01;Database=ElectronicsShopDB;Trusted_Connection=True";
-
-        public async Task<int> Login(string username, string password) //Review Code
+        public ConnectionStringSettings settings =
+            ConfigurationManager.ConnectionStrings["ElectronicsShopDBEntitiesAddedByHand"];
+        private string strConn;
+        public DataAccessService()
         {
+            strConn = settings.ConnectionString;
+        }
+        public async Task<int> Login(string username, string password) //Login operation (stored procedure with ADO NET)
+        {
+           
+
             Users currentUser = new Users();
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
@@ -107,7 +115,7 @@ namespace ElectronicShopManager.Services
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
             var getEmployeesQuery = from Employees in dbEntities.Employees
                                     orderby Employees.FirstName
-                                    select new { Employees.EmployeeID, Employees.FirstName, Employees.LastName };
+                                    select new { Employees.EmployeeID, Employees.FirstName, Employees.LastName }; //won't be tracked as it doesn't contain an instance of an Employee object
             Dictionary<int, string> wholeNames = new Dictionary<int, string>();
             foreach (var employee in getEmployeesQuery.ToList())
             {

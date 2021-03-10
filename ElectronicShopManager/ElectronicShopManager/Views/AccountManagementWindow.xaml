@@ -6,7 +6,12 @@
         xmlns:local="clr-namespace:ElectronicShopManager.Views"
         mc:Ignorable="d"
         Title="AccountManagementWindow" Height="Auto" Width="800">
-
+    <Window.Resources>
+        <!--<local:OrderData x:Key="tasks" />
+        <CollectionViewSource x:Key="cvsTasks" Source="{StaticResource OrderData}" 
+                          Filter="CollectionViewSource_Filter">
+        </CollectionViewSource>-->
+    </Window.Resources>
     <StackPanel>
         <Button Width="150" Height="50" Command="{Binding GetOrdersCommand}" Content="Refresh Orders" HorizontalAlignment="Center" Margin="20"/>
         <StackPanel Orientation="Horizontal" Margin="0,0,-0.4,0">

@@ -2,6 +2,7 @@
 using ElectronicShopManager.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,13 @@ namespace ElectronicShopManager.Services
    
     public class DataUpdateService // Used for any queries that actually update the database
     {
-        private readonly string strConn = "Data Source=localhost\\SQLEXPRESS01;Database=ElectronicsShopDB;Trusted_Connection=True";
+        public ConnectionStringSettings settings =
+             ConfigurationManager.ConnectionStrings["ElectronicsShopDBEntitiesAddedByHand"];
+        private string strConn;
+        public DataUpdateService()
+        {
+            strConn = settings.ConnectionString;
+        }
         public async Task ModifyOrderAsync(OrderHistory modifiedOrder)
         {
             await Task.Run(() => ModifyOrder(modifiedOrder));
@@ -26,7 +33,7 @@ namespace ElectronicShopManager.Services
             orderToModify.DeliveryAddress = modifiedOrder.DeliveryAddress;
             orderToModify.ReceiptNumber = modifiedOrder.ReceiptNumber;
             orderToModify.Status = modifiedOrder.Status;
-            orderToModify.OrderDate = modifiedOrder.OrderDate;//Change to custom date
+            orderToModify.OrderDate = modifiedOrder.OrderDate;
 
             dbEntities.SaveChanges();           
         }
@@ -99,35 +106,44 @@ namespace ElectronicShopManager.Services
             dbEntities.SaveChanges();
             // Add total price after automatically calculating it in DB 
             decimal newPrice = GetNewPrice(newOrder.OrderID);
-            dbEntities.OrderHistory.Where(x => x.OrderID == newOrder.OrderID).FirstOrDefault().TotalPrice = newPrice;
+            newOrder.TotalPrice = newPrice; //still tracked
             dbEntities.SaveChanges();
         }
         private decimal GetNewPrice(int orderID) //Gets the collective price of the order from all of its details
         {
-            ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            List<OrderDetails> allDetails = dbEntities.OrderDetails.AsNoTracking().Where(x => x.OrderID == orderID).ToList();
-            decimal newPrice = 0;
-            foreach (var detail in allDetails)
+            using (SqlConnection connection = new SqlConnection(strConn))
             {
-                newPrice += (decimal)detail.PriceWithDiscount;
+                decimal newPrice = 0;
+                var dapperDetails = connection.Query("Select [PriceWithDiscount] From OrderDetails Where [OrderDetails].[OrderID] = @orderID", new { orderID = orderID }).ToList();
+                foreach (var detail  in dapperDetails)
+                {
+                    newPrice += detail.PriceWithDiscount;
+                }
+                return newPrice;
             }
-            return newPrice;
+
+            //ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
+            //List<OrderDetails> allDetails = dbEntities.OrderDetails.AsNoTracking().Where(x => x.OrderID == orderID).ToList();
+            //decimal newPrice = 0;
+            //foreach (var detail in allDetails)
+            //{
+            //    newPrice += (decimal)detail.PriceWithDiscount;
+            //}
+            //return newPrice;
         }
         private decimal GetProductPrice(int productID)
-        {
+        {           
+            using (SqlConnection connection = new SqlConnection(strConn))
+            {
+                var dapperProduct = connection.Query("Select [Price] From Products Where [Products].[ProductID] = @productID", new { productID = productID }).ToList().FirstOrDefault();
+                return dapperProduct.Price;
+            }
 
-            //var sql = (,);
-            //using (SqlConnection connection = new SqlConnection(strConn))
-            //{
-            //    var dapperProduct = connection.Query("Select [Price] From Products Where [Products].[ProductID] = @productID", new { productID = productID }).ToList().FirstOrDefault();
-            //}
-         
-
-            ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            decimal price = dbEntities.Products.AsNoTracking().Where(p => p.ProductID == productID).FirstOrDefault().Price;
+            //ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
+            //decimal price = dbEntities.Products.AsNoTracking().Where(p => p.ProductID == productID).FirstOrDefault().Price;
 
 
-            return price;
+            //return price;
         }
         private string GetRandomString(int length) //Generates an example receipt number  
         {

@@ -49,6 +49,7 @@ namespace ElectronicShopManager.ViewModels
                 OnPropertyChanged("SelectedOrder");
             }
         }
+
         private ObservableCollection<OrderHistory> orderData;
         public ObservableCollection<OrderHistory> OrderData
         {
