@@ -29,6 +29,18 @@ namespace ElectronicShopManager.Views
             viewModel.currUser = (Users)Application.Current.Properties["CurrentUser"];
             this.DataContext = viewModel;
         }
+        private void IntegerUpDown_PreviewTextInput(object sender,TextCompositionEventArgs e)
+        {
+            foreach (var ch in e.Text)
+            {
+                if (!(Char.IsDigit(ch)))
+                {
+                    e.Handled = true;
+
+                    break;
+                }
+            }
+        }
         private void AddOrder_Clicked(object sender,RoutedEventArgs e)
         {
           

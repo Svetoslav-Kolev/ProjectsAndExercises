@@ -39,6 +39,7 @@ namespace ElectronicShopManager
             {
                 AccountManagementWindow accountWindow = new AccountManagementWindow();
                 accountWindow.Show();
+                this.Close();
             }
 
         }

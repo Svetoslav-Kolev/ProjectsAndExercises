@@ -21,6 +21,6 @@
             <Button Width="150" Height="30" ToolTipService.ShowOnDisabled="true" ToolTip="Select an order to modify first" IsEnabled="{Binding CanViewDetails}" Click="ModifyOrder_Clicked"  Content="Modify Order" HorizontalAlignment="Left" Margin="40 0 0 0"/>
         </StackPanel>
         <DataGrid x:Name="OrderGrid" IsReadOnly="True" ItemsSource="{Binding OrderData, Mode=TwoWay}"  SelectedItem="{Binding SelectedOrder, Mode=TwoWay}" AutoGeneratingColumn="OrderGrid_AutoGeneratingColumn" Margin="20"/>
-
+        <Button Width="150" Height="30"   Click="LogOut_Clicked"  Content="Log Out" HorizontalAlignment="Center"/>
     </StackPanel>
 </Window>

@@ -2,7 +2,9 @@
 using ElectronicShopManager.Models;
 using ElectronicShopManager.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,6 +44,7 @@ namespace ElectronicShopManager.ViewModels
             set
             {
                 discount = value;
+                ValidateDiscount();
                 RaisePropertyChanged("Discount");
             }
         }
@@ -168,6 +171,48 @@ namespace ElectronicShopManager.ViewModels
             SelectedQuantity = -1;
             Discount = 0;
             Address = string.Empty;
+        }
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();
+
+        public bool HasErrors => _errorsByPropertyName.Any();
+        private void OnErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+        private void ClearErrors(string propertyName)
+        {
+            if (_errorsByPropertyName.ContainsKey(propertyName))
+            {
+                _errorsByPropertyName.Remove(propertyName);
+                OnErrorsChanged(propertyName);
+            }
+        }
+        private void AddError(string propertyName, string error)
+        {
+            if (!_errorsByPropertyName.ContainsKey(propertyName))
+                _errorsByPropertyName[propertyName] = new List<string>();
+
+            if (!_errorsByPropertyName[propertyName].Contains(error))
+            {
+                _errorsByPropertyName[propertyName].Add(error);
+                OnErrorsChanged(propertyName);
+            }
+        }
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errorsByPropertyName.ContainsKey(propertyName) ?
+             _errorsByPropertyName[propertyName] : null;
+        }
+        private void ValidateDiscount()
+        {
+            ClearErrors(nameof(Discount));
+            if (string.IsNullOrWhiteSpace(Discount.ToString()))
+                AddError(nameof(Discount), "Discount cannot be empty.");
+            if (Discount < 0 || Discount > 100)
+                AddError(nameof(Discount), "Discount must be between 0 and 100");
+
         }
     }
 }

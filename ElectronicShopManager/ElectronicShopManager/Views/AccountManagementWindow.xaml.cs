@@ -33,15 +33,23 @@ namespace ElectronicShopManager.Views
             this.DataContext = accountModel;
             
         }
+        public void LogOut_Clicked(object sender, RoutedEventArgs e )
+        {
+            Application.Current.Properties["CurrentUser"] = null;
+            MainWindow loginWindow = new MainWindow();
+            loginWindow.Show();
+            this.Close();
+
+        }
         public void AddOrder_Clicked(object sender , RoutedEventArgs e)
         {
             AddOrderWindow addWindow = new AddOrderWindow();
-            addWindow.Show();
+            addWindow.ShowDialog();
         }
         public void ModifyOrder_Clicked(object sender, RoutedEventArgs e)
         {
             ModifyOrderView addWindow = new ModifyOrderView(accountModel.SelectedOrder);
-            addWindow.Show();
+            addWindow.ShowDialog();
         }
         public void ViewDetails_Clicked(object sender , RoutedEventArgs e)
         {

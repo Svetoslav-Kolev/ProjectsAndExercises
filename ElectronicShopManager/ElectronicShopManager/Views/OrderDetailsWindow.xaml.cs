@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace ElectronicShopManager.Views
 {
@@ -30,6 +31,20 @@ namespace ElectronicShopManager.Views
             detailsModel.OrderID = orderID;
             this.DataContext = detailsModel;
         }
+        private void IntegerUpDown_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            foreach (var ch in e.Text)
+            {
+                if (!(Char.IsDigit(ch)))
+                {
+                    e.Handled = true;
+
+                    break;
+                }
+            }
+
+        }
+
         private void OrderGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (e.PropertyName == "ProductID") //Remove extra fields from the command properties of Order
@@ -39,7 +54,7 @@ namespace ElectronicShopManager.Views
                 dgtc.Header = "Product";
                 (dgtc.Binding as Binding).Converter = con;
             }
-            else if(e.PropertyName == "OrderHistory" || e.PropertyName == "Products")
+            else if (e.PropertyName == "OrderHistory" || e.PropertyName == "Products")
             {
                 e.Cancel = true;
             }
@@ -49,6 +64,11 @@ namespace ElectronicShopManager.Views
 
                 dgtc.Binding.StringFormat = "{0} %";
             }
+        }
+
+        private void myUpDownControl_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+
         }
     }
 }

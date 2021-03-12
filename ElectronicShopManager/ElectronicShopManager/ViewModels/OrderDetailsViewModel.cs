@@ -131,6 +131,7 @@ namespace ElectronicShopManager.ViewModels
             set
             {
                 discount = value;
+                ValidateDiscount();
                 OnPropertyChanged("Discount");
             }
         }
@@ -186,7 +187,9 @@ namespace ElectronicShopManager.ViewModels
         private bool CanAddDetails()
         {
             if (SelectedProductID != 0
-                && SelectedQuantity != 0)
+                && SelectedQuantity != 0
+                && Discount >-1
+                && Discount<101)
             {
                 return true;
             }
@@ -261,6 +264,50 @@ namespace ElectronicShopManager.ViewModels
          
 
         }
-             
+        /// <summary>
+        /// Validation Part may be removed if deemed unnecessary
+        /// </summary>
+        public event EventHandler<DataErrorsChangedEventArgs> ErrorsChanged;
+
+        private readonly Dictionary<string, List<string>> _errorsByPropertyName = new Dictionary<string, List<string>>();
+
+        public bool HasErrors => _errorsByPropertyName.Any();
+        private void OnErrorsChanged(string propertyName)
+        {
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+        private void ClearErrors(string propertyName)
+        {
+            if (_errorsByPropertyName.ContainsKey(propertyName))
+            {
+                _errorsByPropertyName.Remove(propertyName);
+                OnErrorsChanged(propertyName);
+            }
+        }
+        private void AddError(string propertyName, string error)
+        {
+            if (!_errorsByPropertyName.ContainsKey(propertyName))
+                _errorsByPropertyName[propertyName] = new List<string>();
+
+            if (!_errorsByPropertyName[propertyName].Contains(error))
+            {
+                _errorsByPropertyName[propertyName].Add(error);
+                OnErrorsChanged(propertyName);
+            }
+        }
+        public IEnumerable GetErrors(string propertyName)
+        {
+            return _errorsByPropertyName.ContainsKey(propertyName) ?
+             _errorsByPropertyName[propertyName] : null;
+        }
+        private void ValidateDiscount()
+        {
+            ClearErrors(nameof(Discount));
+            if (string.IsNullOrWhiteSpace(Discount.ToString()))
+                AddError(nameof(Discount), "Discount cannot be empty.");
+            if (Discount < 0 || Discount > 100)
+                AddError(nameof(Discount), "Discount must be between 0 and 100");
+
+        }
     }
 }

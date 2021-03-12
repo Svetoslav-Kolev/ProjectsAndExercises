@@ -163,12 +163,8 @@ namespace ElectronicShopManager.Services
 
             OrderHistory orderToRemove = dbEntities.OrderHistory.Where(x => x.OrderID == OrderID).FirstOrDefault();
 
-            List<OrderDetails> detailsToRemove = dbEntities.OrderDetails.Where(x => x.OrderID == OrderID).ToList();
+            dbEntities.OrderDetails.RemoveRange(orderToRemove.OrderDetails.ToList());
 
-            foreach (var orderDetail in detailsToRemove)
-            {
-                dbEntities.OrderDetails.Remove(orderDetail);
-            }
             dbEntities.OrderHistory.Remove(orderToRemove);
             dbEntities.SaveChanges();
         }

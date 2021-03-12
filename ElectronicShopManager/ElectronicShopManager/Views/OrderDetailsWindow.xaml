@@ -18,7 +18,22 @@
         <Label Content="Quantity of product to purchase (select a product before selecting quantity):"/>
         <ComboBox x:Name="QuantitiesComboBox" ItemsSource="{Binding Quantity}" ToolTip="Must select a product before selecting quantity" SelectedItem="{Binding SelectedQuantity}"/>
         <Label Content="Discount: (in percentages)"/>
-        <xctk:IntegerUpDown Maximum="100" Value="{Binding Discount}" Name="myUpDownControl" Minimum="0"  />
+        <TextBox  Text="{Binding Discount ,Mode=TwoWay , UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Margin="0,20,0,20" PreviewTextInput="IntegerUpDown_PreviewTextInput"  Name="myUpDownControl">
+            <Validation.ErrorTemplate>
+                <ControlTemplate>
+                    <StackPanel>
+                        <AdornedElementPlaceholder x:Name="textBox" />
+                        <ItemsControl ItemsSource="{Binding}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding ErrorContent}" Foreground="Red" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </ControlTemplate>
+            </Validation.ErrorTemplate>
+        </TextBox>
         <Button Content="Add Details for the order" ToolTip="Please fill out all details first" ToolTipService.ShowOnDisabled="True" Command="{Binding AddDetailsCommand}" Margin="0 50 0 0" Width="150" Height="30"/>
         <Button Content="Remove Order Detail" ToolTip="Select detail to remove first" ToolTipService.ShowOnDisabled="True" Command="{Binding RemoveDetailCommand}" Margin="0 50 0 0" Width="150" Height="30"/>
         <TextBlock Text="{Binding Notification}" HorizontalAlignment="Center"/>
