@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace ElectronicShopManager.ViewModels
 {
-    class OrderDetailsViewModel:BaseViewModel
+    class OrderDetailsViewModel:BaseViewModel , INotifyDataErrorInfo
     {
         public OrderDetailsViewModel()
         {

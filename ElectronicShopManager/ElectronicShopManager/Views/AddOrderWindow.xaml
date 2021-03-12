@@ -29,7 +29,7 @@
         <Label Content="Quantity of product to purchase (select a product before selecting quantity):"/>
         <ComboBox x:Name="QuantitiesComboBox" ItemsSource="{Binding Quantity}" ToolTip="Must select a product before selecting quantity" SelectedItem="{Binding SelectedQuantity}"/>
         <Label Content="Discount for the order: (in percentages)"/>
-        <TextBox  Text="{Binding Discount ,Mode=TwoWay , UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Margin="0,20,0,20" PreviewTextInput="IntegerUpDown_PreviewTextInput"  Name="myUpDownControl">
+        <TextBox  Text="{Binding Discount ,Mode=TwoWay , UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" Margin="0,20,0,20" PreviewTextInput="IntegerUpDown_PreviewTextInput"  >
             <Validation.ErrorTemplate>
                 <ControlTemplate>
                     <StackPanel>

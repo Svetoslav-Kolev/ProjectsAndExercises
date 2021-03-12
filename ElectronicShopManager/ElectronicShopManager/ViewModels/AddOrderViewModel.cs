@@ -12,7 +12,7 @@ using System.Windows.Input;
 
 namespace ElectronicShopManager.ViewModels
 {
-    class AddOrderViewModel : OrderBaseViewModel
+    class AddOrderViewModel : OrderBaseViewModel , INotifyDataErrorInfo
     {
         public AddOrderViewModel()
         {
@@ -130,7 +130,9 @@ namespace ElectronicShopManager.ViewModels
             if (SelectedEmployeeID != 0 
                 && SelectedProductID != 0
                 && SelectedQuantity > 0
-                && Address != string.Empty)
+                && Address != string.Empty
+                && Discount>-1
+                && Discount<101)
             {
                 return true;
             }
