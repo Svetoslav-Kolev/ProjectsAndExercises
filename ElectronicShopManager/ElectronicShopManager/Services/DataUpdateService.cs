@@ -45,7 +45,8 @@ namespace ElectronicShopManager.Services
         public void DeleteOrderDetail(int detailID)
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            OrderDetails detailsToRemove = dbEntities.OrderDetails.Where(d => d.OrderDetailID == detailID).FirstOrDefault();
+            //var sql = "DELETE FROM OrderDetails Where OrderDetailID = {0}";
+            OrderDetails detailsToRemove = dbEntities.OrderDetails.Where(o => o.OrderDetailID == detailID).FirstOrDefault();
             dbEntities.OrderDetails.Remove(detailsToRemove);
             dbEntities.SaveChanges(); //this has to be saved because the price of the details is computed in the database 
             decimal newPrice = GetNewPrice(detailsToRemove.OrderID); 
@@ -61,20 +62,16 @@ namespace ElectronicShopManager.Services
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
 
 
-            OrderDetails detailsToAdd = new OrderDetails();
-            detailsToAdd.OrderID = details.OrderID;
-            detailsToAdd.ProductID = details.ProductID;
-            detailsToAdd.Quantity = details.Quantity;
-            detailsToAdd.UnitPrice = GetProductPrice(detailsToAdd.ProductID);
-            detailsToAdd.Discount = details.Discount;
+            details.UnitPrice = GetProductPrice(details.ProductID);
 
-            dbEntities.OrderDetails.Add(detailsToAdd);
+
+            dbEntities.OrderDetails.Add(details);
 
             dbEntities.SaveChanges(); //this has to be saved because the price of the details is computed in the database 
             decimal newPrice = GetNewPrice(details.OrderID);
             dbEntities.OrderHistory.Where(x => x.OrderID == details.OrderID).FirstOrDefault().TotalPrice = newPrice;
             dbEntities.SaveChanges();
-            return detailsToAdd;
+            return details;
         }
         public async Task AddOrderAsync(Users currentUser, OrderHistory order, OrderDetails details)
         {
@@ -84,30 +81,23 @@ namespace ElectronicShopManager.Services
         {
             ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
 
-            OrderHistory newOrder = new OrderHistory();
-            newOrder.OrderDate = DateTime.Now;
-            newOrder.ReceiptNumber = GetRandomString(13);
-            newOrder.EmployeeID = order.EmployeeID;
-            newOrder.CustomerID = currentUser.UserID;
-            newOrder.DeliveryAddress = order.DeliveryAddress;
-            newOrder.Status = order.Status;
-            newOrder.CurrencyCode = "USD";
+            order.OrderDate = DateTime.Now;
+            order.ReceiptNumber = GetRandomString(13);
+            order.CustomerID = currentUser.UserID;
+            order.CurrencyCode = "USD";
 
-            OrderDetails initialDetails = new OrderDetails();
-            initialDetails.OrderID = newOrder.OrderID;
-            initialDetails.ProductID = details.ProductID;
-            initialDetails.Quantity = details.Quantity;
-            initialDetails.UnitPrice = GetProductPrice(initialDetails.ProductID);
-            initialDetails.Discount = details.Discount;
+           
+            details.OrderID = order.OrderID;
+            details.UnitPrice = GetProductPrice(details.ProductID);
 
-            newOrder.OrderDetails.Add(initialDetails);
-            dbEntities.OrderHistory.Add(newOrder);
-            dbEntities.OrderDetails.Add(initialDetails);
+            order.OrderDetails.Add(details);
+            dbEntities.OrderHistory.Add(order);
+            dbEntities.OrderDetails.Add(details);
 
             dbEntities.SaveChanges();
             // Add total price after automatically calculating it in DB 
-            decimal newPrice = GetNewPrice(newOrder.OrderID);
-            newOrder.TotalPrice = newPrice; //still tracked
+            decimal newPrice = GetNewPrice(order.OrderID);
+            order.TotalPrice = newPrice; //still tracked
             dbEntities.SaveChanges();
         }
         private decimal GetNewPrice(int orderID) //Gets the collective price of the order from all of its details
