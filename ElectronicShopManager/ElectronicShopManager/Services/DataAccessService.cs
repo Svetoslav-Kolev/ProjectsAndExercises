@@ -21,9 +21,7 @@ namespace ElectronicShopManager.Services
             strConn = settings.ConnectionString;
         }
         public async Task<int> Login(string username, string password) //Login operation (stored procedure with ADO NET)
-        {
-           
-
+        {        
             Users currentUser = new Users();
             using (SqlConnection sqlConn = new SqlConnection(strConn))
             {
@@ -77,7 +75,7 @@ namespace ElectronicShopManager.Services
                 }
             }
         }
-        public async Task<List<OrderHistory>> GetUserOrdersAsync(Users currentUser) // Review Code
+        public async Task<List<OrderHistory>> GetUserOrdersAsync(Users currentUser) 
         {
            return await Task.Run(() => GetUserOrders(currentUser.UserID));
         }

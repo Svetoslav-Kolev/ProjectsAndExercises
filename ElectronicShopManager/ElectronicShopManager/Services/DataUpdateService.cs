@@ -49,7 +49,7 @@ namespace ElectronicShopManager.Services
             OrderDetails detailsToRemove = dbEntities.OrderDetails.Where(o => o.OrderDetailID == detailID).FirstOrDefault();
             dbEntities.OrderDetails.Remove(detailsToRemove);
             dbEntities.SaveChanges(); //this has to be saved because the price of the details is computed in the database 
-            decimal newPrice = GetNewPrice(detailsToRemove.OrderID); 
+            decimal newPrice = GetNewPrice(detailsToRemove.OrderID);
             dbEntities.OrderHistory.Where(o => o.OrderID == detailsToRemove.OrderID).FirstOrDefault().TotalPrice = newPrice;
             dbEntities.SaveChanges();
         }
@@ -106,21 +106,13 @@ namespace ElectronicShopManager.Services
             {
                 decimal newPrice = 0;
                 var dapperDetails = connection.Query("Select [PriceWithDiscount] From OrderDetails Where [OrderDetails].[OrderID] = @orderID", new { orderID = orderID }).ToList();
+               
                 foreach (var detail  in dapperDetails)
                 {
                     newPrice += detail.PriceWithDiscount;
                 }
                 return newPrice;
             }
-
-            //ElectronicsShopDBEntities1 dbEntities = new ElectronicsShopDBEntities1();
-            //List<OrderDetails> allDetails = dbEntities.OrderDetails.AsNoTracking().Where(x => x.OrderID == orderID).ToList();
-            //decimal newPrice = 0;
-            //foreach (var detail in allDetails)
-            //{
-            //    newPrice += (decimal)detail.PriceWithDiscount;
-            //}
-            //return newPrice;
         }
         private decimal GetProductPrice(int productID)
         {           
