@@ -98,16 +98,47 @@ namespace CompanyGraph
 
             return false;
         }
+        public bool AreConnectedDepthFirstIterative(Company companyOne, Company companyTwo)
+        {
+            if (Companies.ContainsKey(companyOne.ID) == false || Companies.ContainsKey(companyTwo.ID) == false)
+            {
+                return false;
+            }
+
+            List<int> VisitedCompanies = new List<int>();
+            
+            Stack<Company> companyStack = new Stack<Company>();
+            VisitedCompanies.Add(companyOne.ID);
+            companyStack.Push(companyOne);
+            while (companyStack.Count>0)
+            {
+                Company currentCompany = companyStack.Pop();
+                if(currentCompany == companyTwo)
+                {
+                    return true;
+                }
+                foreach (var connected in Companies[currentCompany.ID])
+                {
+                    if (!VisitedCompanies.Contains(connected.ID))
+                    {
+                        VisitedCompanies.Add(connected.ID);
+                        companyStack.Push(connected);
+                    }
+                       
+                }
+            }
+            return false;
+        }
         public bool AreConnectedBreadthFirst(Company companyOne, Company companyTwo) //Breadth First
         {
             if (Companies.ContainsKey(companyOne.ID) == false || Companies.ContainsKey(companyTwo.ID) == false)
             {
                 return false;
             }
-            Dictionary<int,bool> VisitedCompanies = new Dictionary<int, bool>();
+            List<int> VisitedCompanies = new List<int>(); //Consider array.exists
             Queue<Company> queue = new Queue<Company>();
             queue.Enqueue(companyOne);
-            VisitedCompanies.Add(companyOne.ID, true);
+            VisitedCompanies.Add(companyOne.ID);
             while (queue.Count > 0)
             {              
                 Company currentCompany = queue.Dequeue();                       
@@ -117,9 +148,9 @@ namespace CompanyGraph
                 }
                 foreach (var linkedCompany in Companies[currentCompany.ID])
                 {
-                    if (!VisitedCompanies.ContainsKey(linkedCompany.ID))
+                    if (!VisitedCompanies.Contains(linkedCompany.ID))
                     {
-                        VisitedCompanies.Add(linkedCompany.ID, true);
+                        VisitedCompanies.Add(linkedCompany.ID);
                         queue.Enqueue(linkedCompany);
                     }
                        
@@ -127,6 +158,7 @@ namespace CompanyGraph
             }
             return false;
         }
+      
         /// <summary>
         /// Dijkstra algorithm for shortest path 
         /// </summary>
@@ -184,13 +216,13 @@ namespace CompanyGraph
         }
         private void fillSet(Company sourceCompany, Dictionary<Company, int> shortestPathSet) //BFS but fills initial distance values for the Dijkstra  algorithm
         {
-            Dictionary<int,bool> VisitedCompanies = new Dictionary<int, bool>();
-            VisitedCompanies.Add(sourceCompany.ID,true);
+           List<int> VisitedCompanies = new List<int>();
+            VisitedCompanies.Add(sourceCompany.ID);
             Queue<Company> queue = new Queue<Company>();
             shortestPathSet[sourceCompany] = 0;
             foreach (var connectedCompany in Companies[sourceCompany.ID])
             {
-                VisitedCompanies.Add(connectedCompany.ID, true);
+                VisitedCompanies.Add(connectedCompany.ID);
                 queue.Enqueue(connectedCompany);
                 
             }
@@ -202,9 +234,9 @@ namespace CompanyGraph
                 shortestPathSet[currentCompany] = int.MaxValue;
                 foreach (var connectedCompany in Companies[currentCompany.ID])
                 {
-                    if (!VisitedCompanies.ContainsKey(connectedCompany.ID))
+                    if (!VisitedCompanies.Contains(connectedCompany.ID))
                     {
-                        VisitedCompanies.Add(connectedCompany.ID, true);
+                        VisitedCompanies.Add(connectedCompany.ID);
                         queue.Enqueue(connectedCompany);
                     }
                         

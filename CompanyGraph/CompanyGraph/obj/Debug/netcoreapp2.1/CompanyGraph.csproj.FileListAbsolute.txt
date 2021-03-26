@@ -9,15 +9,3 @@ D:\Projects\.Net Core Projects\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1
 D:\Projects\.Net Core Projects\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.dll
 D:\Projects\.Net Core Projects\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.pdb
 D:\Projects\.Net Core Projects\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.csprojAssemblyReference.cache
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\bin\Debug\netcoreapp2.1\CompanyGraph.deps.json
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\bin\Debug\netcoreapp2.1\CompanyGraph.runtimeconfig.json
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\bin\Debug\netcoreapp2.1\CompanyGraph.runtimeconfig.dev.json
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\bin\Debug\netcoreapp2.1\CompanyGraph.dll
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\bin\Debug\netcoreapp2.1\CompanyGraph.pdb
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.csprojAssemblyReference.cache
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.AssemblyInfoInputs.cache
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.AssemblyInfo.cs
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.csproj.CoreCompileInputs.cache
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.dll
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.pdb
-D:\repos\ProjectsAndExercises\CompanyGraph\CompanyGraph\obj\Debug\netcoreapp2.1\CompanyGraph.genruntimeconfig.cache

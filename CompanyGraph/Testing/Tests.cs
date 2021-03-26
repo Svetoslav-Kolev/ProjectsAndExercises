@@ -37,13 +37,19 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Non), true);
+
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Zdravkova), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Zdravkova), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Zdravkova), true);
+
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(MentorMate, Zdravkova), true);
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(MentorMate, Zdravkova), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(MentorMate, Zdravkova), true);
 
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(Unconnected, Zdravkova), false);
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(Unconnected, Zdravkova), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(Unconnected, Zdravkova), false);
         }
         [Test]
         public void LinearConnections()
@@ -60,13 +66,19 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Non), true);
+
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(Non, VIK), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(Non, VIK), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(Non, VIK), true);
+
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(Zdravkova, Kodar), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(Zdravkova, Kodar), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(Zdravkova, Kodar), true);
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(Zdravkova, Unconnected), false);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(Zdravkova, Unconnected), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(Zdravkova, Unconnected), false);
         }
         [Test]
         public void RemovingACompany()
@@ -83,9 +95,11 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Non), false);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Non), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Non), false);
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(MentorMate, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(MentorMate, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(MentorMate, Non), true);
 
         }
         [Test]
@@ -98,7 +112,7 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, VIK), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, VIK), true);
-
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, VIK), true);
 
         }
         [Test]
@@ -113,10 +127,14 @@ namespace Testing
             
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Zdravkova), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Zdravkova), true);
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, MentorMate), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, MentorMate), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(MentorMate, Zdravkova), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(MentorMate, Zdravkova), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(MentorMate, Zdravkova), true);
         }
         [Test]
@@ -129,6 +147,7 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, SBTech), false);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, SBTech), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, SBTech), false);
         }
         [Test]
         public void OneCompanyNotInGraph()
@@ -139,6 +158,7 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, SBTech), false);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, SBTech), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, SBTech), false);
         }
         [Test]
         public void BothCompaniesNotInGraph()
@@ -146,6 +166,7 @@ namespace Testing
             companyGraph = new CompanyGraph.CompanyGraph();
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, SBTech), false);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, SBTech), false);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, SBTech), false);
         }
         [Test]
         public void ManyCompaniesToOneFromDifferentConnections()
@@ -162,10 +183,15 @@ namespace Testing
 
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Zdravkova), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Zdravkova), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Zdravkova), true);
+
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(VIK, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(VIK, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(VIK, Non), true);
+
             Assert.AreEqual(companyGraph.AreConnectedDepthFirst(Kodar, Non), true);
             Assert.AreEqual(companyGraph.AreConnectedBreadthFirst(Kodar, Non), true);
+            Assert.AreEqual(companyGraph.AreConnectedDepthFirstIterative(Kodar, Non), true);
         }
     }
 }
