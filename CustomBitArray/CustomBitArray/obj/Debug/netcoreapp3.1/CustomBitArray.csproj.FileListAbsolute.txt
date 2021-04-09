@@ -1,0 +1,13 @@
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.exe
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.deps.json
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.runtimeconfig.json
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.runtimeconfig.dev.json
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.dll
+D:\vsProjects\CustomBitArray\CustomBitArray\bin\Debug\netcoreapp3.1\CustomBitArray.pdb
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.csprojAssemblyReference.cache
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.AssemblyInfoInputs.cache
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.AssemblyInfo.cs
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.csproj.CoreCompileInputs.cache
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.dll
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.pdb
+D:\vsProjects\CustomBitArray\CustomBitArray\obj\Debug\netcoreapp3.1\CustomBitArray.genruntimeconfig.cache
