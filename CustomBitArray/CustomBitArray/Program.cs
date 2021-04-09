@@ -12,8 +12,9 @@ namespace CustomBitArray
             //CheckDuplicate();
 
 
-            CustomBitArray bitArray = new CustomBitArray(10);
+            CustomBitArray bitArray = new CustomBitArray(55);
             bitArray.SetBitToOne(7);
+            bitArray.SetBitToOne(43);
             foreach (bool item in bitArray)
             {
                 Console.WriteLine(item);

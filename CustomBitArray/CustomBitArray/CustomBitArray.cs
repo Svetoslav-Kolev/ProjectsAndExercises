@@ -72,7 +72,7 @@ namespace CustomBitArray
             bitArray[indexAndBitNumber.Item1] &= ~(1 << indexAndBitNumber.Item2);
             count--;
         }
-        public (int,int) ReturnIndexAndPosition(int position)
+        private (int,int) ReturnIndexAndPosition(int position)
         {
             if (position > maxCapacity || position<0)
             {
@@ -114,7 +114,7 @@ namespace CustomBitArray
                 throw new ArgumentOutOfRangeException("arrayIndex");
             if (array.Rank > 1)
                 throw new ArgumentException("array is multidimensional.");
-            if (array.Length - index < Count)
+            if (array.Length - index < maxCapacity)
                 throw new ArgumentException("Not enough elements after index in the destination array.");
             
            
