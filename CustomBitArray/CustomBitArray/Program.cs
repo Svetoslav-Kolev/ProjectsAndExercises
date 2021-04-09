@@ -12,14 +12,19 @@ namespace CustomBitArray
             //CheckDuplicate();
 
 
-            CustomBitArray bitArray = new CustomBitArray(270);
-            bitArray.SetBitToOne(0);
-      
-            bitArray.SetBitToOne(270);
-            var resultMin = bitArray.GetBit(0);
-            var resultMax = bitArray.GetBit(271);
-           
+            CustomBitArray bitArray = new CustomBitArray(10);
+            bitArray.SetBitToOne(7);
+            foreach (bool item in bitArray)
+            {
+                Console.WriteLine(item);
+            }
+            var resulT = bitArray[7];
+            var result2 = bitArray[5];
+            var result3 = bitArray[10];
+            int[] test = new int[50];
+            bitArray.CopyTo(test, 0);
             Console.WriteLine();
+
         }
         public static void FIllFile()
         {
@@ -29,13 +34,13 @@ namespace CustomBitArray
             {
                 using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
                 {
-                    for (int i = 0; i < 1000000; i++)
-                    {
-                        binaryWriter.Write(i);
-                    }
+                    //for (int i = 0; i < 1000000; i++)
+                    //{
+                    //    binaryWriter.Write(i);
+                    //}
                
-                    //binaryWriter.Write(99999);
-                    binaryWriter.Write(1);
+                    binaryWriter.Write(100);
+                    binaryWriter.Write(100);
                 }
             }
         }
@@ -51,15 +56,13 @@ namespace CustomBitArray
                     for (int i = 0; i < toRead / 4; i++)
                     {
                         var result = binaryReader.ReadInt32();
-                        if (bitArray.GetBit(result) == true)
+                        if (bitArray[result])
                         {
                             Console.WriteLine(result);
                             break;
                         }
-                        bitArray.SetBitToOne(result);
+                        bitArray[result] = true;
                     }
-
-
                 }
             }
         }
