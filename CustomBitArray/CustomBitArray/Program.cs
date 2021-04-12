@@ -15,6 +15,7 @@ namespace CustomBitArray
             CustomBitArray bitArray = new CustomBitArray(55);
             bitArray.SetBitToOne(7);
             bitArray.SetBitToOne(43);
+            bitArray.GetBit(56);
             foreach (bool item in bitArray)
             {
                 Console.WriteLine(item);

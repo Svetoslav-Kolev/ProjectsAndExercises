@@ -43,6 +43,10 @@ namespace CustomBitArray
 
         public CustomBitArray(int n)
         {
+            if (n < 0)
+            {
+                throw new ArgumentException("Capacity cannot be a negative number.");
+            }
             count = 0;
             maxCapacity = n;
             bitArray = new int[(n>>5)+1];   //effectively divides by 2^5 (32)
