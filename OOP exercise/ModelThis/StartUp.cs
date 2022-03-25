@@ -12,7 +12,7 @@ namespace ModelThis
             // Example Code for the main method
             LogisticsAutopark logisticsAutopark = new LogisticsAutopark(20);
             PublicTransportationAutopark publicTransportation = new PublicTransportationAutopark(25);
-
+            //hehe
             MotorVehicle[] vehicles = new MotorVehicle[] 
             {
                 new Van(10, 15, 20),
